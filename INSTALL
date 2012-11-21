@@ -1,0 +1,50 @@
+WINDOWS:
+
+The included hpzip.vcproj file is a Visual Studio project that allows
+the compilation of the program in a Windows environment.
+
+The GSL library is needed to compile the project. The included project
+files assume that the library files are located in 
+C:\Program Files\GnuWin32\lib and the include files are in 
+C:\Program Files\GnuWin32\include (those are the default installation
+directories for the Windows GSL library)
+
+The project include debug and release settings, in addition to the
+optimizations and debug symbols the debug settings define the DEBUG
+preprocessor variable.
+
+
+UNIX:
+
+The included Makefile can be used to compile the project in a GNU
+environment. This file creates two executable files: hpzip and
+hpzip.opt. The first one is the debug version and the second is the
+optimized version. The debug version defines the DEBUG preprocessor 
+variable.
+
+In addition to those files, two links to them are created called
+hpunzip and hpunzip.opt. These can be used to decompress files without
+the needing to specify any command line options.
+
+The GSL library is needed for compilation. It must be located in any
+of the default library directories. If this is not so the appropriate
+environment variables should be adjusted (i.e. LD_LIBRARY_PATH, etc.)
+
+This makefile can also be used to generate the program
+documentation. To do so the command "make doc" must be executed. For it
+to work the the doxygen documentation utility must be installed in the
+system. 
+
+To clean the object code files created during compulation "make clean"
+must be executed. Furthermore the "make doc-clean" command deletes all
+the generated documentation.
+
+
+ARITHMETIC ENCODER:
+
+The "arithemtic" directory contains the arithemtic encoder/decoder
+source code as taken from
+http://dogma.net/markn/articles/arith/part1.htm
+
+
+

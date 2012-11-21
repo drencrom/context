@@ -1,0 +1,54 @@
+This is an implementation of the semi predictive coding algoritm of
+[1].
+
+
+SOURCE CODE:
+
+All the source code files for the encoder, except the arithmetic
+encoder/decoder are in this same directory. The arithmetic encoder
+code is in the "arithmetic" directory, and the documentation is in the
+"doc" directory.
+
+For information about compilating this code see the INSTALL file.
+
+
+DOCUMENTATION:
+
+Inside the doc directory there are two subdirectories. In html there
+is the HTML version of the manual. In the latex directory there is the
+PDF version of the manual. If the documentation is generated again
+(see INSTALL file) the latex directory will contain the latex source
+files that allow the creation of the documentation file in PDF
+format. To do so the command "make" must be executed in this
+directory.
+
+
+USAGE:
+
+hpzip [options] input_file [output_file]
+hpunzip [options] input_file [output_file]
+
+Options:
+        -z: compress (default)
+        -d: decompress (default if invoked as hpunzip)
+        -b: binarize file (needed for compression and decompression)
+        -h: show this message
+
+Options for compression only:
+        -k: use Kurtz algorithm (default)
+        -u: use Ukkonnen algorithm (default with -b)
+
+When the file is invoked as "hpzip" compression is the default
+action. When invoked as "hpunzip" decompression is the default.
+
+The default output_file for compression is input_file.hpz. When
+decompressing the default output file is the input file with the
+extension removed. If the input file does not has an extension the
+default output file wil be input_file.out
+
+The -k and -u options select the algorithm that will be used to build
+the context tree of the input string.
+
+
+[1] A. Martín, G. Seroussi, M. Weinberger, Linear Time Universal
+Coding and Time Reversal of Tree Sources via FSM Closure.

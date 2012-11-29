@@ -1,11 +1,11 @@
 #!/bin/bash
 
-file_path=../../../../../files
+file_path=../../../files
 ctw=../../../../ctw/ctw
 ppm=../../code/ppmd-i1-jorge/PPMd.exe
-paq=../../../../paq/zpaq102
-unpaq=../../../../paq/unzpaq102
-paqfile=../../../../paq/max.cfg
+paq=../../paq/zpaq102
+unpaq=../../paq/unzpaq102
+paqfile=../../paq/max.cfg
 encoder=../hpzip.opt
 decoder=../hpunzip.opt
 tmpfile=/tmp/tabulator_tmp
@@ -99,10 +99,10 @@ for ((i=0; i<${#sizes[*]}; i++)); do
         size=`du -b $file_path/${sizes[$i]}/${text_files[$i]}.hpz | awk '{print $1}'`
         echo -n ",$size"
 
-       	#decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${text_files[$i]}.hpz $tmpfile > /dev/null) 2>& 1`
+       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${text_files[$i]}.hpz $tmpfile > /dev/null) 2>& 1`
 	echo -n ",$decTime"
 
-	#diff $file_path/${sizes[$i]}/${text_files[$i]} $tmpfile > /dev/null 	
+	diff $file_path/${sizes[$i]}/${text_files[$i]} $tmpfile > /dev/null 	
 	if [ "$?" = "0" ]; then
 		echo -n ",Yes"
 	else

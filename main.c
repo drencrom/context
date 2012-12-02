@@ -414,7 +414,7 @@ static void printUsage (char *progname) {
 int main(int argc,char *argv[])
 {
   int i, algorithm = 0, parts = 1;
-  BOOL compress, see = True;
+  BOOL compress, see = False;
   char *error = NULL, *pos;
 
 #ifdef WIN32  

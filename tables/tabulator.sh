@@ -11,8 +11,9 @@ decoder=../hpunzip.opt
 tmpfile=/tmp/tabulator_tmp
 
 sizes=( 100k 600k 1m )
-data_files=( lexgrog fcpci.ko xine )
-text_files=( texto.txt book2 bible.txt )
+#sizes=( 100k 600k 1m 2m 2.5m 4m )
+data_files=( lexgrog fcpci.ko xine trident_dri.so libkabc_groupwise.so.1.0.0 libevll.so )
+text_files=( texto.txt book2 bible.txt 2donq10.txt world192.txt bible.txt )
 
 
 echo "DATA"

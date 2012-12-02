@@ -147,7 +147,7 @@ double howard (statistics_t stats) {
   }
   printf("\n");
   x = (evalLogGamma(ns) - ((stats->symbolCount - 1) * loghalf) - evalLogGamma(stats->symbolCount) - sum + (stats->symbolCount * 0.5 * M_LNPI)) / M_LN2;
-  return x/0.7;
+  return x;
 }
 
 double aux (statistics_t stats, Uint * distinct) {

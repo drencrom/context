@@ -139,13 +139,13 @@ double howard (statistics_t stats) {
   double x;
 
   for (i=0; i<stats->symbolCount; i++) {
-    printf ("%d ", stats->count[stats->symbols[i]]);
+    /*printf ("%d ", stats->count[stats->symbols[i]]);*/
     ns += stats->count[stats->symbols[i]];
     if (stats->count[stats->symbols[i]] > 0) {
       sum += evalLogGamma2(stats->count[stats->symbols[i]]-1);
     }
   }
-  printf("\n");
+  /*printf("\n");*/
   x = (evalLogGamma(ns) - ((stats->symbolCount - 1) * loghalf) - evalLogGamma(stats->symbolCount) - sum + (stats->symbolCount * 0.5 * M_LNPI)) / M_LN2;
   return x/0.7;
 }

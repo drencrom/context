@@ -333,8 +333,7 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
   BOOL found, escape;
   Uchar * text;
 
-  MAX_COUNT = 300000;
-  /*MAX_COUNT = ceil(510/log((alphasize <= 91 ? 2 : alphasize - 90)));*/
+  MAX_COUNT = 25000;
 
   printf("MAX_COUNT: %d\n", MAX_COUNT);
   MALLOC(text, Uchar, textlen);

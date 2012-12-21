@@ -106,46 +106,25 @@ void updateSee (Uint state, BOOL escape, Uint alphasize) {
     See[state][1] += 18;
   }
   else {
-    if (See[state][0] >= (alphasize >= 150 ? 500 : 4000)) {
+    if (See[state][0] >= (alphasize >= 100 ? 500 : 4000)) {
       See[state][0] = (See[state][0] >> 1) + 1;
       See[state][1] = (See[state][1] >> 1) + 1;
     }
-    See[state][1] += (alphasize >= 150 ? 16 : 17);
+    See[state][1] += (alphasize >= 100 ? 16 : 17);
   }
 
-  if (See[state][1] >= (alphasize >= 150 ? 800 : 8000)) {
+  if (See[state][1] >= (alphasize >= 100 ? 800 : 8000)) {
     See[state][0] = (See[state][0] >> 1) + 1;
     See[state][1] = (See[state][1] >> 1) + 1;
   }
 }
 
 void initSee () {
-  Uint allCount, allScaled, state, i;
+  int i=0;
 
-  for (allScaled = 0; allScaled < 4; allScaled++) {
-    switch(allScaled) {
-    case 0: 
-      allCount = 20;
-      break;
-    case 1: 
-      allCount = 30;
-      break;
-    case 2:
-      allCount = 40;
-      break;
-    case 3: 
-      allCount = 50;
-      break;
-    default:
-      allCount = 0;
-      break;
-    }
-
-    state = allScaled << 11;
-    for(i=0; i<(1<<11); i++) {
-      See[state][0] =  20;
-      See[state][1] = allCount + 20;
-      state++;
-    }
+  for (i=0; i< 1<<13; i++) {
+    See[i][0]=20;
+    See[i][1]=50;
   }
 }
+

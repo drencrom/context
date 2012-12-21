@@ -38,7 +38,8 @@ OBJ=main.o\
     decoder.o\
     arithmetic/bitio.o\
     arithmetic/coder.o\
-    gammaFunc.o
+    gammaFunc.o\
+    reset.o
 
 OBJOPT=main.opt.o\
        wotd.opt.o\
@@ -54,7 +55,8 @@ OBJOPT=main.opt.o\
        decoder.opt.o\
        arithmetic/bitio.o\
        arithmetic/coder.o\
-       gammaFunc.opt.o
+       gammaFunc.opt.o\
+       reset.opt.o		
 
 .PHONY: all arithmetic doc clean doc-clean
 

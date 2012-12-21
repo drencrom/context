@@ -13,6 +13,7 @@
 #include "debug.h"
 #include "alpha.h"
 #include "text.h"
+#include "reset.h"
 #include "arithmetic/coder.h"
 #include "arithmetic/bitio.h"
 
@@ -32,7 +33,6 @@
 
 /** Magic number to detect valid hpz files */
 #define MAGIC 0x3276
-
 
 /**
  * Writes a byte to the output file using the arithmetic encoder
@@ -221,6 +221,8 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
   printf ("Alphasize: %d\n", alphasize);
   printf("Algorithm %d\n", algorithm);
 
+  setMaxCount();
+
   /* write magic number */
   putc(MAGIC >> 8, compressed_file);
   putc(MAGIC, compressed_file);
@@ -357,6 +359,8 @@ static void unzip(char *filename, char *output, BOOL see) {
 
   readAlphabet(compressed_file);
 
+  setMaxCount();
+
   for (part = 1; part <= parts; part++) {  
     printf("---------- part %d ---------------\n", part);
     /* read textlen */
@@ -467,6 +471,9 @@ int main(int argc,char *argv[])
   if (parts < 1) {
     error = "Invalid number of parts";
   }
+
+  MAX_COUNT = 300;
+  /*MAX_COUNT = ceil(510/log((alphasize <= 91 ? 2 : alphasize - 90)));*/
 
   if (!error && argc > i) {
     if (algorithm == 0) {

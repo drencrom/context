@@ -113,7 +113,7 @@ void updateSee (Uint state, BOOL escape, Uint alphasize) {
     See[state][1] += (alphasize >= 100 ? 16 : 17);
   }
 
-  if (See[state][1] >= (alphasize >= 100 ? 800 : 8 (tengo que corregir esta seccion)000)) {
+  if (See[state][1] >= (alphasize >= 100 ? 800 : 8000)) {
     See[state][0] = (See[state][0] >> 1) + 1;
     See[state][1] = (See[state][1] >> 1) + 1;
   }

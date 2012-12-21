@@ -8,10 +8,9 @@
 #include "spacedef.h"
 #include "stack.h"
 #include "see.h"
+#include "reset.h"
 #include "arithmetic/coder.h"
 #include "arithmetic/bitio.h"
-
-static Uint MAX_COUNT;
 
 static Uint findSymbolCount (decoderTree_t tree, Uchar sym) {
   Uint i;
@@ -332,9 +331,6 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
   decoderTree_t origTree, prevTree = NULL;
   BOOL found, escape;
   Uchar * text;
-
-  /*MAX_COUNT = 300;*/
-  MAX_COUNT = ceil(510/log((alphasize <= 91 ? 2 : alphasize - 90)));
 
   printf("MAX_COUNT: %d\n", MAX_COUNT);
   MALLOC(text, Uchar, textlen);

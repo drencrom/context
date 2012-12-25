@@ -640,6 +640,7 @@ static void pruneRoot() {
   /*est = kt(stats);*/ 
   /*est = moffat(stats);*/
   est = howard(stats);
+  /*est = deckard(stats);*/
 
   if (est <= stats->cost) { /* pruning needed */
     nextfreeentry = 0; /* indicates an empty tree */
@@ -728,6 +729,7 @@ static void prune(Uint node, Uint length, Uint branchLength) {
     /*est = kt(stats); */
     /*est = moffat(stats);*/
     est = howard(stats);
+    /*est = deckard(stats);*/
     assert(est >= 0);
  
     if (est <= stats->cost) { /* pruning needed */

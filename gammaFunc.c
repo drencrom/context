@@ -1,6 +1,7 @@
 #include "gammaTable.h"
 #include "gammaFunc.h"
 #include "debug.h"
+#include "reset.h"
 #include <math.h> /* for log */
 
 #ifdef DEBUG
@@ -116,22 +117,6 @@ double kt (statistics_t stats) {
   return (gamma1 + gamma2 - gamma3 - sum) / M_LN2;
 }
 
-/*double howard (statistics_t stats) {
-  Uint ns = 0, occur = 0, i;
-  double sum = 0;
-  double loghalf = 0.6931471805599452862;
-
-  for (i=0; i<stats->symbolCount; i++) {
-    ns += stats->count[stats->symbols[i]];
-    if (stats->count[stats->symbols[i]] > 0) {
-      occur++;
-      sum -= evalLogGamma2(stats->count[stats->symbols[i]]);
-    }
-  }
-
-  return (sum + evalLogGamma(ns) - evalLogGamma(occur + 1) - (occur * loghalf) + evalLogGamma(alphasize + 1) - evalLogGamma(alphasize - occur + 1)) / M_LN2;
-}*/
-
 double howard (statistics_t stats) {
   Uint ns = 0, i;
   double sum = 0;
@@ -149,18 +134,23 @@ double howard (statistics_t stats) {
 }
 
 double deckard (statistics_t stats) {
-  Uint ns = 0, i;
+  Uint i;
+  double ns = 0;
   double sum = 0;
   double loghalf = -0.6931471805599452862;
-  double x;
+  double x, sumTmp;
+  double MAX_COUNT_D = MAX_COUNT;
 
   for (i=0; i<stats->symbolCount; i++) {
     ns += stats->count[stats->symbols[i]];
     if (stats->count[stats->symbols[i]] > 0) {
-      sum += evalLogGamma2(stats->count[stats->symbols[i]]-1);
+      sumTmp = evalLogGamma(MAX_COUNT+2) + (MAX_COUNT_D / 2) + (evalLogGamma(MAX_COUNT+1) / 2);
+      sum += stats->count[stats->symbols[i]] / (MAX_COUNT_D+1) * sumTmp;
     }
   }
-  x = (evalLogGamma(ns) - ((stats->symbolCount - 1) * loghalf) - evalLogGamma(stats->symbolCount) - sum + (stats->symbolCount * 0.5 * M_LNPI)) / M_LN2;
+  x = (-(ns / (MAX_COUNT_D+1)) * (evalLogGamma((2*MAX_COUNT_D) + 1) - ((MAX_COUNT+1) * loghalf) - evalLogGamma(MAX_COUNT)) - evalLogGamma(MAX_COUNT) - ((MAX_COUNT-1) * loghalf) +
+    (ns / 2) * M_LNPI - ns * (evalLogGamma(MAX_COUNT + 1) / 2) + ((stats->symbolCount - 1) / ((MAX_COUNT_D / 2) - 1)) * (evalLogGamma(MAX_COUNT+1) - evalLogGamma(MAX_COUNT_D / 2)) - 
+    evalLogGamma(MAX_COUNT_D / 2) - sum) / M_LN2;
   return x;
 }
 

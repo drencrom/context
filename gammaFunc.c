@@ -139,13 +139,27 @@ double howard (statistics_t stats) {
   double x;
 
   for (i=0; i<stats->symbolCount; i++) {
-    printf ("%d ", stats->count[stats->symbols[i]]);
     ns += stats->count[stats->symbols[i]];
     if (stats->count[stats->symbols[i]] > 0) {
       sum += evalLogGamma2(stats->count[stats->symbols[i]]-1);
     }
   }
-  printf("\n");
+  x = (evalLogGamma(ns) - ((stats->symbolCount - 1) * loghalf) - evalLogGamma(stats->symbolCount) - sum + (stats->symbolCount * 0.5 * M_LNPI)) / M_LN2;
+  return x;
+}
+
+double deckard (statistics_t stats) {
+  Uint ns = 0, i;
+  double sum = 0;
+  double loghalf = -0.6931471805599452862;
+  double x;
+
+  for (i=0; i<stats->symbolCount; i++) {
+    ns += stats->count[stats->symbols[i]];
+    if (stats->count[stats->symbols[i]] > 0) {
+      sum += evalLogGamma2(stats->count[stats->symbols[i]]-1);
+    }
+  }
   x = (evalLogGamma(ns) - ((stats->symbolCount - 1) * loghalf) - evalLogGamma(stats->symbolCount) - sum + (stats->symbolCount * 0.5 * M_LNPI)) / M_LN2;
   return x;
 }
@@ -166,7 +180,7 @@ double aux (statistics_t stats, Uint * distinct) {
 
 /**
  * @returns log2 of the alphabet size. 
- **/
+ */
 double log2Alpha () {
   if (alphasizeLog == 0) {
     alphasizeLog = gsl_sf_log(alphasize) / M_LN2;
@@ -177,7 +191,7 @@ double log2Alpha () {
 
 /** 
  * @returns binary entropy of 1/alphasize. 
- **/
+ */
 double hAlpha () {
   if (alphaEntropy == 0) {
     double invAlpha = (double)1 / alphasize;

@@ -681,7 +681,7 @@ static void prune(Uint node, Uint length, Uint branchLength) {
 	stats->count[idx]++;
 	distinct[idx]++;
       }
-      stats->cost += log2Alpha();
+      /*stats->cost += log2Alpha();*/
     }
     else {
       childStats = (statistics_t)GETSTATS(nodeptr);

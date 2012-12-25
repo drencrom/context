@@ -10,8 +10,7 @@
 #include "arithmetic/coder.h"
 #include "arithmetic/bitio.h"
 #include "see.h"
-
-static Uint MAX_COUNT;
+#include "reset.h"
 
 Uint findSymbolCount (fsmTree_t tree, Uchar sym) {
   Uint i;
@@ -141,9 +140,6 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
   BOOL found;
   fsmTree_t origTree;
   Uchar sym;
-
-  /*MAX_COUNT = 300;*/
-  MAX_COUNT = ceil(510/log((alphasize <= 91 ? 2 : alphasize - 90)));
   
   printf("MAX_COUNT: %d\n", MAX_COUNT);
   CALLOC(maskedChars, Uint, alphasize);

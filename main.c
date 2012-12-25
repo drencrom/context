@@ -33,6 +33,7 @@
 /** Magic number to detect valid hpz files */
 #define MAGIC 0x3276
 
+int MAX_COUNT;
 
 /**
  * Writes a byte to the output file using the arithmetic encoder
@@ -467,6 +468,9 @@ int main(int argc,char *argv[])
   if (parts < 1) {
     error = "Invalid number of parts";
   }
+
+  MAX_COUNT = 300;
+  /*MAX_COUNT = ceil(510/log((alphasize <= 91 ? 2 : alphasize - 90)));*/
 
   if (!error && argc > i) {
     if (algorithm == 0) {

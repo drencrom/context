@@ -266,7 +266,7 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
     }
 
     if (part > 1) {
-      copyStatistics(prevTree, stree, prevText);
+      /*copyStatistics(prevTree, stree, prevText);*/
       FREE(prevText);
       freeFsmTree(prevTree);
     }
@@ -417,7 +417,7 @@ static void printUsage (char *progname) {
  */
 int main(int argc,char *argv[])
 {
-  int i, algorithm = 0, parts = 1;
+  int i, algorithm = 0, parts = 5;
   BOOL compress, see = True;
   char *error = NULL, *pos;
 

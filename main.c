@@ -477,7 +477,7 @@ int main(int argc,char *argv[])
 
   if (!error && argc > i) {
     if (algorithm == 0) {
-      algorithm = KURTZ;
+      algorithm = UKKONEN;
     }
 
     if (compress) {

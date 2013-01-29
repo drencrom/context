@@ -2,7 +2,10 @@
 
 file_path=../../../files/$1
 ctw=../../ctw/ctw
-ppm=../../code/ppmd-i1/PPMd.exe
+ppm=../../code/ppmd-i1-jorge/PPMd.exe
+paq=../../paq/zpaq102
+unpaq=../../paq/unzpaq102
+paqfile=../../paq/max.cfg
 encoder=../hpzip.opt
 decoder=../hpunzip.opt
 tmpfile=/tmp/tabulator_tmp
@@ -11,22 +14,18 @@ bpcs="2 k "
 count=0
 
 echo ",,Time,Space,Dec. Time,OK"
-cd $file_path
 
-for i in *; do
-   	base=`basename $i`
-	echo -n $base
-	echo -n ",ppm"
+for i in "$file_path"/*; do
+	echo -n `basename $i`
+	echo -n ",ctw"
 
-	rm -f xxx.pmd
- 	time=`(/usr/bin/time -f%E $ppm e -m265 -o16 -fxxx.pmd $base > /dev/null) 2>&1`
+	time=`(/usr/bin/time -f%E $paq c$paqfile $i.paq $i > /dev/null) 2>&1`
     echo -n ",$time"
 
-    size=`du -b xxx.pmd | awk '{print $1}'`
+    size=`du -b $i.paq | awk '{print $1}'`
     echo -n ",$size"
 
-	rm $i
-   	decTime=`(/usr/bin/time -f%E $ppm d xxx.pmd > /dev/null) 2>&1`
+	decTime=`(/usr/bin/time -f%E $unpaq x $i.paq > /dev/null) 2>&1`
 	echo -n ",$decTime"
 
     sizeOrig=`du -b $i | awk '{print $1}'`
@@ -44,7 +43,5 @@ bpcs+="$count / p";
 echo "$bpcs" | dc;
 echo
 
-rm -f xxx.pmd
-cd - > /dev/null
- 
-
+rm -f $file_path/*.ctw
+rm -f $file_path/*.d

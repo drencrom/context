@@ -1,7 +1,7 @@
 #!/bin/bash
 
-file_path=../../../../../files/$1
-ctw=../../../../ctw/ctw
+file_path=../../../files/$1
+ctw=../../ctw/ctw
 ppm=../../code/ppmd-i1-jorge/PPMd.exe
 encoder=../hpzip.opt
 decoder=../hpunzip.opt

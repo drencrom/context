@@ -122,7 +122,7 @@ static void readAlphabet(FILE *file) {
   alphasize = readByte(file);
 
   if (alphasize == 0) alphasize = 256;
-  printf("Alphasize: %d\n", alphasize);
+  printf("Alphasize: %ld\n", alphasize);
 
   if (alphasize <= UCHAR_MAX) {
     if (alphasize < 128) { /* read alphabet */
@@ -218,7 +218,7 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
   if (alloc) FREE(compressed);
 
   buildAlpha(origText, origTextLen);
-  printf ("Alphasize: %d\n", alphasize);
+  printf ("Alphasize: %ld\n", alphasize);
   printf("Algorithm %d\n", algorithm);
 
   setMaxCount();
@@ -272,13 +272,13 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
     }
 
     DEBUGCODE(printf("gamma hits: %d gamma Misses: %d\n", getHits(), getMisses()));
-    printf("height: %d\n", getHeight(stree));
+    printf("height: %ld\n", getHeight(stree));
 
     /* write textlen */
     for (i=3; i>=0; i--) {
       writeByte(textlen >> (8 * i), compressed_file);
     }
-    printf ("Textlen: %d\n", textlen);
+    printf ("Textlen: %ld\n", textlen);
     writeFsmTree(stree, compressed_file);
     printf("FSM...\n");
     makeFsm(stree);
@@ -373,7 +373,7 @@ static void unzip(char *filename, char *output, BOOL see) {
       /*}*/
 
     printf("Tree built\n");
-    printf("Textlen: %d\n", textlen);
+    printf("Textlen: %ld\n", textlen);
     printf("FSM...\n"); 
     /*if (part == 1) {*/
     DEBUGCODE(printDecoderTree(tree));

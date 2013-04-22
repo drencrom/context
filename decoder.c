@@ -107,10 +107,10 @@ static void printStats (decoderTree_t origTree, Uint *maskedChars, Uint i) {
 
   printf ("## ");
   for(j=0; j<origTree->totalSyms; j++) {
-    printf("count[%d] = %d %s", origTree->symbols[j], origTree->count[j], 
+    printf("count[%d] = %ld %s", origTree->symbols[j], origTree->count[j], 
 	   (maskedChars[alphaindex[origTree->symbols[j]]] == i+1 ? "(masked) " : ""));
   }
-  printf("Total: %d %d (%p)\n", origTree->totalCount, origTree->totalSyms, (void *)origTree);
+  printf("Total: %ld %ld (%p)\n", origTree->totalCount, origTree->totalSyms, (void *)origTree);
   /*printf("Total: %d %d\n", origTree->totalCount, origTree->totalSyms);*/
   
   /*if (!isRootDecoderTree (origTree)) {
@@ -332,7 +332,7 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
   BOOL found, escape;
   Uchar * text;
 
-  printf("MAX_COUNT: %d\n", MAX_COUNT);
+  printf("MAX_COUNT: %ld\n", MAX_COUNT);
   MALLOC(text, Uchar, textlen);
   CALLOC(maskedChars, Uint, alphasize);
 
@@ -343,7 +343,7 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
   for (i=0; i<textlen; i++) {
     origTree = tree->origin;
     numMasked = 0;
-    DEBUGCODE(printf("index: %d\n", i));
+    DEBUGCODE(printf("index: %ld\n", i));
     /*DEBUGCODE(printf("orig: "); printStats(tree, maskedChars));*/
 
     if (origTree->totalCount > MAX_COUNT && origTree->used) {

@@ -32,6 +32,11 @@ typedef unsigned char  Uchar;
 /** Unsigned short type */
 typedef unsigned short Ushort;        
 
+/** Unsigned int type. */
+typedef unsigned long  Uint;
+
+/** Signed int type. */          
+typedef signed   long  Sint;          
 
 /*
   The following is the central case distinction to accomodate
@@ -40,12 +45,6 @@ typedef unsigned short Ushort;
 
 #ifdef SIXTYFOURBITS
 
-/** Unsigned int type. */
-typedef unsigned long  Uint;
-
-/** Signed int type. */          
-typedef signed   long  Sint;          
-
 /** Base 2 logarithm of wordsize. */
 #define LOGWORDSIZE    6            
 
@@ -53,12 +52,6 @@ typedef signed   long  Sint;
 #define UintConst(N)   (N##UL)  
 
 #else
-
-/** Unsigned int type. */
-typedef unsigned int  Uint;
-
-/** Signed int type. */          
-typedef signed   int  Sint; 
          
 /** Base 2 logarithm of wordsize. */
 #define LOGWORDSIZE   5              

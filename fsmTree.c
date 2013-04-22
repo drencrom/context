@@ -442,7 +442,7 @@ static void printRec(const fsmTree_t tree, int level) {
     /*printf("  %d - %d \n", text[tree->left], text[tree->right]);*/
     assert (tree->right < textlen);
     assert (tree->left < textlen);
-    printf("%d - %d (%p) parent: %p orig: %p\n", tree->left, tree->right, (void*)tree, (void*)tree->parent, (void*)tree->origin); 
+    printf("%ld - %ld (%p) parent: %p orig: %p\n", tree->left, tree->right, (void*)tree, (void*)tree->parent, (void*)tree->origin); 
     for (i=tree->left; i< tree->right; i++) {
       printf("%d-", *(text + i));
     }
@@ -574,7 +574,7 @@ void writeFsmTree(const fsmTree_t tree, FILE *file) {
   if (internalNodes > 0) {
     writeFsmTreeRec(tree, 0, file);
   }
-  printf("Representantion cost: %ld (internal: %d, total: %d)\n", 
+  printf("Representantion cost: %ld (internal: %ld, total: %ld)\n", 
 	 bit_ftell_output(file) - cost, internal, total);
 }
 

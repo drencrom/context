@@ -564,7 +564,7 @@ static void printRec(const decoderTree_t tree, int level) {
       printf("-");
     } 
 
-    printf("%d - %d (%p) parent: %p orig: %p\n", tree->left, tree->right, (void*)tree, (void*)tree->parent, (void*)tree->origin); 
+    printf("%ld - %ld (%p) parent: %p orig: %p\n", tree->left, tree->right, (void*)tree, (void*)tree->parent, (void*)tree->origin); 
     for (i=0; i<tree->right; i++) {
       printf("%d-", *(*(tree->text) + i));
     }
@@ -698,7 +698,7 @@ decoderTree_t readDecoderTree(FILE *file) {
   /* DEBUGCODE(printf("%d %d %d\n", s.scale, s.low_count, s.high_count)); */
     
   totalNodes = (internalNodes * alphasize) + 1;
-  printf("Nodes: internal %d total %d\n", internalNodes, totalNodes);
+  printf("Nodes: internal %d total %ld\n", internalNodes, totalNodes);
 
   if (internalNodes > 0) {
     /*FIXME: nunca guardar el nodo root*/

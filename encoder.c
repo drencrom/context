@@ -28,10 +28,10 @@ static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
 
   printf ("## ");
   for(j=0; j<origTree->totalSyms; j++) {
-    printf("count[%d] = %d %s", origTree->symbols[j], origTree->count[j], 
+    printf("count[%d] = %ld %s", origTree->symbols[j], origTree->count[j], 
 	   (maskedChars[alphaindex[origTree->symbols[j]]] == i+1 ? "(masked) " : ""));
   }
-  printf("Total: %d %d (%p)\n", origTree->totalCount, origTree->totalSyms, (void *)origTree);
+  printf("Total: %ld %ld (%p)\n", origTree->totalCount, origTree->totalSyms, (void *)origTree);
   /*printf("Total: %d %d\n", origTree->totalCount, origTree->totalSyms);*/
 
   /*if (!isRootFsmTree(origTree)) {
@@ -141,7 +141,7 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
   fsmTree_t origTree;
   Uchar sym;
   
-  printf("MAX_COUNT: %d\n", MAX_COUNT);
+  printf("MAX_COUNT: %ld\n", MAX_COUNT);
   CALLOC(maskedChars, Uint, alphasize);
   cost = bit_ftell_output(compressedFile);
 
@@ -152,7 +152,7 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
   for (i=0; i<textlen; i++) { 
     sym = text[i];
     pos = GETINDEX(i);
-    DEBUGCODE(printf("index: %d\n", i));
+    DEBUGCODE(printf("index: %ld\n", i));
     origTree = tree->origin;
     numMasked = 0;
     assert(origTree != NULL);

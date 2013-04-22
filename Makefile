@@ -10,7 +10,7 @@ LD=${CC}
 
 mode=32bit
 
-ifeq (${mode},"64bit")
+ifeq (${mode},64bit)
  CFLAGS+=-m64 -DSIXTYFOURBITS
  CFLAGSOPT+=-m64 -DSIXTYFOURBITS
  LDFLAGS+=-m64

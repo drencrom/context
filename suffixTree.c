@@ -226,7 +226,7 @@ static void printNode(suffixTree_t tree) {
   else {
     GET_RIGHT(right, tree);
     if (right == INFINITY) right = textlen;
-    printf("%d - %d", tree->left, right);
+    printf("%ld - %ld", tree->left, right);
     /*for (i=tree->left; i<= tree->right; i++) {
       if (i == textlen) {
 	printf("$");
@@ -326,9 +326,9 @@ void buildSuffixTree(suffixTree_t tree) {
     update(s, k, i, &s, &k);
     canonize(s, k, i, &s, &k);
     i++;
-    if (i%1000 == 0)  printf("%d/%d\r", i, textlen);
+    if (i%1000 == 0)  printf("%ld/%ld\r", i, textlen);
   }
-  printf("%d/%d\n", textlen, textlen);
+  printf("%ld/%ld\n", textlen, textlen);
   DEBUGCODE(printf("Original tree size: %d\n", treeSize(tree)));
 }
 

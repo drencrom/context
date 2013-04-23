@@ -1,7 +1,6 @@
 #include <assert.h>
 #include "see.h"
 #include "debug.h"
-#include <math.h> /* for log */
 
 static int get3ByteRepresentation (const Uint num, const Uint alphasize) {
   if (num <= 0) return 0;
@@ -58,7 +57,7 @@ int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked,
   /************/
 
   state <<=3;
-  state |= (int)(log(text[pos-1]+1)+0.5);
+  state |= get3ByteRepresentation(text[pos-1], alphasize);
 
   return state;
 }
@@ -95,7 +94,7 @@ int getSeeStateDecoder (decoderTree_t tree, Uint allCount, Uint pos, Uint numMas
   /************/
 
   state <<=3;
-  state |= (int)(log(text[pos-1]+1)+0.5);
+  state |= get3ByteRepresentation(text[pos-1], alphasize);
 
   return state;
 }

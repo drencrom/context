@@ -58,7 +58,7 @@ int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked,
   /************/
 
   state <<=3;
-  state |= (int)(log(text[pos-1])+0.5);
+  state |= (int)(log(text[pos-1]+1)+0.5);
 
   return state;
 }
@@ -95,7 +95,7 @@ int getSeeStateDecoder (decoderTree_t tree, Uint allCount, Uint pos, Uint numMas
   /************/
 
   state <<=3;
-  state |= (int)(log(text[pos-1])+0.5);
+  state |= (int)(log(text[pos-1]+1)+0.5);
 
   return state;
 }

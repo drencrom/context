@@ -83,12 +83,11 @@ static void canonize (suffixTree_t s, Uint k, Uint p, suffixTree_t *retS, Uint *
  */
 static BOOL testAndSplit(suffixTree_t s, Uint k, Uint p, suffixTree_t *r) {
   suffixTree_t sPrime = s, new;
-  Uint kPrime, pPrime;
+  Uint kPrime;
 
   if (p != -1 && k <= p) {
     for (sPrime=sPrime->child; sPrime && text[sPrime->left]!=text[k]; sPrime=sPrime->sibling);
     kPrime = sPrime->left;
-    GET_RIGHT(pPrime, sPrime);
     if ((p+1 < textlen) && (text[kPrime+p-k+1] == text[p+1])) {
       *r = s;
       return True;
@@ -227,14 +226,6 @@ static void printNode(suffixTree_t tree) {
     GET_RIGHT(right, tree);
     if (right == INFINITY) right = textlen;
     printf("%ld - %ld", tree->left, right);
-    /*for (i=tree->left; i<= tree->right; i++) {
-      if (i == textlen) {
-	printf("$");
-      }
-      else { 
-	printf("%c", text[i]);
-      }
-    }*/
   }
 }
 
@@ -252,11 +243,6 @@ static void printRec(suffixTree_t tree, Uint level) {
       printf("-");
     }
     printNode (tree);
-    /*if (tree->suffix) {
-      printf("  (");
-      printNode (tree->suffix, text, textlen);
-       printf(")");
-    }*/
     printf("\n");
   }
   
@@ -382,11 +368,10 @@ void pruneSuffixTree(suffixTree_t tree) {
 	  tree->stats->cost += child->stats->cost;
 	  freeStatistics(child->stats);
 	}
-	/* FIXME: ver bien el costo de la raiz (= alphasize) */
+
 	GET_RIGHT(right, tree);
 	tree->stats->cost += hAlpha() * alphasize * (right - tree->left + 1); 
 
-	/*est = kt(tree->stats);*/
 	est = howard(tree->stats);
 	if (est <= tree->stats->cost) { /* we have to prune */
 	  tree->stats->cost = est;
@@ -417,12 +402,6 @@ fsmTree_t fsmSuffixTree(suffixTree_t tree) {
       POPNODE(sfxPtr);
       fsmNode = (fsmTree_t)fsmPtr;
       tree = (suffixTree_t)sfxPtr;
-      /*if (tree->left == textlen) {
-	pos = alphasize;
-      }
-      else {
-	pos = GETINDEX(tree->left);   
-      }*/
       if (tree->left != textlen) { /* ignore $ leaves */
 	pos = GETINDEX(tree->left);   
 	fsmNode->children[pos] = initFsmTree();

@@ -21,10 +21,6 @@
 #include "gammaFunc.h" 
 #endif
 
-/* This should be calculated sometime
-#define MAXTEXTLEN          UintConst(715827882)
-*/
-
 /** Ukkonen linear suffix tree contruction algorithm. */
 #define UKKONEN 1
 
@@ -196,12 +192,6 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
     fprintf(stderr,"Cannot open file %s\n", filename);
     exit(EXIT_FAILURE);
   }
-  /*if(textLen > MAXTEXTLEN)
-    {
-    fprintf(stderr,"Sorry, textlen = %lu is larger than maximal textlen = %lu\n",
-    (Showuint) textLen,(Showuint) MAXTEXTLEN);
-    exit(EXIT_FAILURE);
-    }*/
 
   if (!compressed) {
     CALLOC(compressed, Uchar, strlen(filename) + 5);
@@ -368,23 +358,19 @@ static void unzip(char *filename, char *output, BOOL see) {
       textlen += readByte(compressed_file) << (8 * i);
     }
 
-    /*if (part == 1) {*/
-      tree = readDecoderTree(compressed_file);
-      /*}*/
+    tree = readDecoderTree(compressed_file);
 
     printf("Tree built\n");
     printf("Textlen: %ld\n", textlen);
     printf("FSM...\n"); 
-    /*if (part == 1) {*/
+
     DEBUGCODE(printDecoderTree(tree));
     makeDecoderFsm(tree);
     DEBUGCODE(printDecoderTree(tree));
-      /*}*/
 
     printf("Decoding...\n");
     decode(tree, textlen, compressed_file, output_file, see);
   }
-  /*freeDecoderTree(tree);*/
   fclose(compressed_file);
   fclose(output_file);
 }
@@ -473,7 +459,6 @@ int main(int argc,char *argv[])
   }
 
   MAX_COUNT = 300;
-  /*MAX_COUNT = ceil(510/log((alphasize <= 91 ? 2 : alphasize - 90)));*/
 
   if (!error && argc > i) {
     if (algorithm == 0) {

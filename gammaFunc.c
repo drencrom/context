@@ -23,25 +23,6 @@ static double alphasizeLog = 0;
 /** Binary entropy of 1/alphasize. */
 static double alphaEntropy = 0;
 
-
-/**
- * Calculates LN(n!) If offset != 0 calculates LN((n + offset)!) defined as LN((n + offset) * 
- *  (n - 1 + offset) * ... * (1 + offset))
- * @param[in] n the argument
- * @param[in] offset the offset to add to the argument in each step
- */
-static double lnFactorial (int n, double offset) {
-  int i;
-  double fact = log(1 + offset);
-
-  for (i=n; i>1; i--) {
-    fact += log(i + offset);
-  }
-
-  return fact;
-}
-
-
 /**
  * Calculates Ln (gamma(n)). 
  * @param[in] n the argument.
@@ -130,27 +111,6 @@ double howard (statistics_t stats) {
     }
   }
   x = (evalLogGamma(ns) - ((stats->symbolCount - 1) * loghalf) - evalLogGamma(stats->symbolCount) - sum + (stats->symbolCount * 0.5 * M_LNPI)) / M_LN2;
-  return x;
-}
-
-double deckard (statistics_t stats) {
-  Uint i;
-  double ns = 0;
-  double sum = 0;
-  double loghalf = -0.6931471805599452862;
-  double x, sumTmp;
-  double MAX_COUNT_D = MAX_COUNT;
-
-  for (i=0; i<stats->symbolCount; i++) {
-    ns += stats->count[stats->symbols[i]];
-    if (stats->count[stats->symbols[i]] > 0) {
-      sumTmp = evalLogGamma(MAX_COUNT+2) + (MAX_COUNT_D / 2) + (evalLogGamma(MAX_COUNT+1) / 2);
-      sum += stats->count[stats->symbols[i]] / (MAX_COUNT_D+1) * sumTmp;
-    }
-  }
-  x = (-(ns / (MAX_COUNT_D+1)) * (evalLogGamma((2*MAX_COUNT_D) + 1) - ((MAX_COUNT+1) * loghalf) - evalLogGamma(MAX_COUNT)) - evalLogGamma(MAX_COUNT) - ((MAX_COUNT-1) * loghalf) +
-    (ns / 2) * M_LNPI - ns * (evalLogGamma(MAX_COUNT + 1) / 2) + ((stats->symbolCount - 1) / ((MAX_COUNT_D / 2) - 1)) * (evalLogGamma(MAX_COUNT+1) - evalLogGamma(MAX_COUNT_D / 2)) - 
-    evalLogGamma(MAX_COUNT_D / 2) - sum) / M_LN2;
   return x;
 }
 

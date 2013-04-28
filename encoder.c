@@ -23,6 +23,8 @@ Uint findSymbolCount (fsmTree_t tree, Uchar sym) {
   return 0;
 }
 
+#ifdef DEBUG
+
 static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
   int j;
 
@@ -32,21 +34,9 @@ static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
 	   (maskedChars[alphaindex[origTree->symbols[j]]] == i+1 ? "(masked) " : ""));
   }
   printf("Total: %ld %ld (%p)\n", origTree->totalCount, origTree->totalSyms, (void *)origTree);
-  /*printf("Total: %d %d\n", origTree->totalCount, origTree->totalSyms);*/
-
-  /*if (!isRootFsmTree(origTree)) {
-    for (j=origTree->left; j< origTree->right; j++) {
-      printf("%d-", *(text + j));
-    }
-    if (origTree->right == textlen) {
-      printf("$\n");
-    }
-    else {
-      printf("%d\n", *(text + origTree->right));
-    }
-  }  
-  else printf("\n");*/
 }
+
+#endif
 
 /**
  * Remove symbols from the statistics of the ancestors of this node in case that is necessary.
@@ -56,7 +46,7 @@ static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
  * @param[in] deletedChars bit vector indicating which characters have been erased from the node statistics.
  */
 static void fixParents (fsmTree_t tree, BOOL *deletedChars) {
-  Uint i; /*, numEscapes;*/
+  Uint i;
   Uchar sym;
   fsmTree_t parTree = tree;
   BOOL newChars;
@@ -72,10 +62,8 @@ static void fixParents (fsmTree_t tree, BOOL *deletedChars) {
 
     if (!newChars) { /* there are no new symbols */
       DEBUGCODE(printf("fixing %p\n", (void *)parTree));
-      /*numEscapes = parTree->totalCount;*/
       parTree->totalCount = 0;
       for (i=0; i<parTree->totalSyms; i++) {  
-	/*numEscapes -= parTree->count[i];*/
 	if (deletedChars[alphaindex[parTree->symbols[i]]]) {
 	  parTree->count[i] = 0;
 	}
@@ -84,9 +72,6 @@ static void fixParents (fsmTree_t tree, BOOL *deletedChars) {
 	}
       }
 
-      /*numEscapes = numEscapes >> 1;
-      if (numEscapes == 0) numEscapes = 1;  es necesario esto? 
-      parTree->totalCount += numEscapes;*/
       parTree->totalCount *= 2;
     }
     else break;
@@ -136,14 +121,12 @@ static void rescale (fsmTree_t tree) {
 void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint textlen, const BOOL useSee) {
   SYMBOL s, escape;
   Uint i, j, k, numMasked, low, pos, allCount, noMask, *maskedChars, state;
-  long cost;
   BOOL found;
   fsmTree_t origTree;
   Uchar sym;
   
   printf("MAX_COUNT: %ld\n", MAX_COUNT);
   CALLOC(maskedChars, Uint, alphasize);
-  cost = bit_ftell_output(compressedFile);
 
   if (useSee) {
     initSee();
@@ -165,7 +148,6 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
     do {
       noMask = -1;
       if (origTree->totalSyms > numMasked) { /* found a parent with more data */
-	/*printf("encontre estado con mas simbolos\n");*/
 	low = j = allCount = 0;
 	do {
 	  allCount += origTree->count[j];
@@ -197,7 +179,6 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 	  if (low > 0 && useSee) {
 	    state = getSeeStateEncoder(origTree, allCount, i, numMasked, text, alphasize);
 	    if (state != -1) {
-	      /*DEBUGCODE(printf("-- state %d %d\n", See[state][0], See[state][1]));*/
 	      escape.scale = escape.high_count = See[state][1];
 	      escape.low_count = See[state][0];
 
@@ -209,7 +190,6 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 	    }
 	  }
 
-	  /*DEBUGCODE(printf("++scale: %d high: %d low: %d symbol: %d\n", s.scale, s.high_count, s.low_count, sym));*/
 	  DEBUGCODE(printf("++scale: %d diff: %d symbol: %d\n", s.scale, s.high_count - s.low_count, sym));
 
 	  encode_symbol(compressedFile, &s);
@@ -223,9 +203,7 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 
 	  if (origTree->totalCount > 0 && low > 0 && useSee) {
 	    state = getSeeStateEncoder(origTree, allCount, i, numMasked, text, alphasize);
-	    /*DEBUGCODE(printf("-- state %d\n", state));*/
 	    if (state != -1) {
-	      /*DEBUGCODE(printf("-- state %d %d\n", See[state][0], See[state][1]));*/
 	      escape.scale = See[state][1];
 	      escape.low_count = 0;
 	      escape.high_count = See[state][0];
@@ -239,7 +217,6 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 	    }
 	  }
 
-	  /*if (s.scale > 0 && s.low_count > 0) {*/
 	  if (s.scale > 0) {
 	    DEBUGCODE(printf("--scale: %d diff: %d symbol: %d\n", s.scale, s.high_count - s.low_count, -1));
 	    encode_symbol(compressedFile, &s);
@@ -285,7 +262,6 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 	s.high_count = low + 1;
 	encode_symbol(compressedFile, &s);
 	
-	/*DEBUGCODE(printf("++scale: %d high: %d low: %d symbol: %d\n", s.scale, s.high_count, s.low_count, sym));*/
 	DEBUGCODE(printf("++scale: %d diff: %d symbol: %d\n", s.scale, s.high_count - s.low_count, sym));
       }
 

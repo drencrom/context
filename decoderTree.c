@@ -21,19 +21,6 @@ static Uint totalNodes;
 
 static struct obstack nodeStack;
 
-static void  updateChildrenTransitions(decoderTree_t node, Uint cidx, decoderTree_t origTrans, decoderTree_t newTrans) {
-  Uint i;
-
-  for (i=0; i<alphasize; i++) {
-    if (node->children[i]) {
-      if (node->children[i]->transitions[cidx] == origTrans) {
-	node->children[i]->transitions[cidx] = newTrans;
-      }
-      updateChildrenTransitions(node->children[i], cidx, origTrans, newTrans);
-    }
-  }
-}
-
 /** 
  * Calculates the canonical decomposition of a string in a faster way. It is only possible to use this variant in some special cases.
  * @param[in] tree node from where to start the search.
@@ -106,7 +93,6 @@ static void canonize(decoderTree_t tree, Uint xLeft, Uint xRight, decoderTree_t 
     *uLeft = 1;
     *uRight = 0; /* u is empty */
     end = True;
-    /* FIXME: es necesario esto? */
   }
   else if (tree->left != ROOT) {
     xLeft += tree->right + 1;
@@ -223,7 +209,7 @@ static decoderTree_t insert (decoderTree_t r, decoderTree_t node, Uint uLeft, Ui
     r->children[GETINDEX2(vLeft)] = new;
     new->parent = r;
 
-    if (r->internal/* && decoder*/) {
+    if (r->internal) {
       new->origin = new;
     }
     else {
@@ -257,10 +243,7 @@ static decoderTree_t insert (decoderTree_t r, decoderTree_t node, Uint uLeft, Ui
     new->parent = r; 
     r->children[GETINDEX2(uLeft)] = new;
 
-    /*if (!decoder) {
-      new->origin = r->origin;
-    }
-    else*/ if (r->internal) {
+    if (r->internal) {
       new->origin = new;
     }
     else {
@@ -287,8 +270,6 @@ static decoderTree_t insert (decoderTree_t r, decoderTree_t node, Uint uLeft, Ui
     new->traversed[alphaindex[(*new->text)[new->right+1]]] = r->traversed[GETINDEX2(uLeft)];
 
     if (vLeft <= vRight) {
-
-      /******/
       if (new->internal && vRight > vLeft) { /* if a non atomical node is added we have to insert the leaf of T(x) which is the parent of this node */
 	newLeaf = initDecoderTree(False);
 	DEBUGCODE(printf("New node6: %p\n", (void *)newLeaf));
@@ -317,7 +298,6 @@ static decoderTree_t insert (decoderTree_t r, decoderTree_t node, Uint uLeft, Ui
 	vLeft++;
 	new = newLeaf;
       }
-      /******/
 
       newLeaf = initDecoderTree(False);
       DEBUGCODE(printf("New node2: %p\n", (void *)newLeaf));
@@ -400,9 +380,6 @@ static void verify(const decoderTree_t root, decoderTree_t node, BOOL fast, BOOL
     }
     node->tail = x;
 
-    /*if (decoder) {
-      updateChildrenTransitions(x, cidx, x->transitions[cidx], node);
-      }*/
     x->transitions[cidx] = node;
   } 
   
@@ -484,7 +461,6 @@ static BOOL readEncoder(FILE *file) {
     totalNodes--;
     remove_symbol_from_stream(file, &s);
 
-    /* printf("low:%d high:%d scale:%d symbol:%d\n", s.low_count, s.high_count, s.scale, internal); */
     return internal;
   }
 }
@@ -510,7 +486,6 @@ static int readDecoderTreeRec (decoderTree_t t, FILE *file) {
       else if (onlyChild >= 0) {
 	onlyChild = -2; /* more than one children */
       }
-      /*onlyChild = -2;*/
       
       t->children[i] = initDecoderTree(True);
       child = t->children[i];
@@ -525,7 +500,6 @@ static int readDecoderTreeRec (decoderTree_t t, FILE *file) {
       }
       else {
 	child->left = child->right = t->left + 1;
-	/*if (i == 0) {*/
 	if (onlyChild >= 0) { /* first child */
 	  child->text = t->text;
 	  REALLOC(*child->text, *child->text, Uchar, child->left + 1);
@@ -569,13 +543,6 @@ static void printRec(const decoderTree_t tree, int level) {
       printf("%d-", *(*(tree->text) + i));
     }
     printf("%d\n", *(*(tree->text) + tree->right));
-
-    /*printf("  %d %d (%p)\n", tree->left, tree->right, (void*)tree);
-      printf(" %d\n", **tree->text);*/
-    /*for (i=0; i<tree->left; i++) {
-      printf("%c", (*tree->text)[i]);
-    }
-    printf("%c\n", (*tree->text)[tree->left]);*/
   }
   else {
     printf("(root)\n");
@@ -663,7 +630,6 @@ void freeDecoderTree(decoderTree_t tree, BOOL deleteText) {
  * @param[in] tree the tree to process.
  */
 void makeDecoderFsm(decoderTree_t tree) {
-  /* decoderTree_t transitions [alphasize]; */
   decoderTree_t *transitions;
   Uint i;
 
@@ -695,13 +661,11 @@ decoderTree_t readDecoderTree(FILE *file) {
   s.low_count = internalNodes;
   s.high_count = internalNodes + 1;
   remove_symbol_from_stream(file, &s);
-  /* DEBUGCODE(printf("%d %d %d\n", s.scale, s.low_count, s.high_count)); */
     
   totalNodes = (internalNodes * alphasize) + 1;
   printf("Nodes: internal %d total %ld\n", internalNodes, totalNodes);
 
   if (internalNodes > 0) {
-    /*FIXME: nunca guardar el nodo root*/
     readEncoder(file); /* leo el root */
     readDecoderTreeRec(ret, file);
   }

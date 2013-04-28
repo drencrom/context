@@ -584,13 +584,13 @@ static void pruneRoot() {
 
   nodeptr = streetab;
 
-  /* contadores */
+  /* counters */
   stats = getStatistics();
 
   do {
     if (ISLEAF(nodeptr)) {
-      if (GETLP(nodeptr) > 0) { /* sino el caracter anterior esta afuera del string */
-	pos = GETLP(nodeptr) - 1; /* posicion donde empieza la hoja menos el largo anterior */
+      if (GETLP(nodeptr) > 0) { /* if false the previous character is outside of string */
+	pos = GETLP(nodeptr) - 1; /* position where leaf starts minus previous length */
 	idx = alphaindex[*(text+pos)];
 	if (stats->count[idx] == 0) {
 	  stats->symbols[stats->symbolCount++] = idx;

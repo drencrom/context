@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h> /* for log */
 #include "see.h"
 #include "debug.h"
 
@@ -57,7 +58,9 @@ int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked,
   /************/
 
   state <<=3;
-  state |= get3ByteRepresentation(text[pos-1], alphasize);
+  if ((pos > 0) && (text[pos-1] > 0)) {
+    state |= (int)(log(text[pos-1])+0.5);
+  }
 
   return state;
 }
@@ -94,7 +97,9 @@ int getSeeStateDecoder (decoderTree_t tree, Uint allCount, Uint pos, Uint numMas
   /************/
 
   state <<=3;
-  state |= get3ByteRepresentation(text[pos-1], alphasize);
+  if ((pos > 0) && (text[pos-1] > 0)) {
+    state |= (int)(log(text[pos-1])+0.5);
+  }
 
   return state;
 }

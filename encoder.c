@@ -32,6 +32,8 @@
 
 #ifdef DEBUG
 
+#ifdef DEBUG
+
 static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
   int j;
 

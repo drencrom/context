@@ -78,7 +78,6 @@ static void fastCanonize(fsmTree_t tree, Uint xLeft, Uint xRight, fsmTree_t *r, 
   }
 
   *r = tree;
-  /*TODO: esto se arregla con *uleft=xleft y *uRight=xRight y sin if */
   if (xLeft <= xRight) {
     *uLeft = child->left;
     *uRight = child->left + xRight - xLeft;
@@ -178,7 +177,7 @@ static fsmTree_t insert (fsmTree_t r, Uint uLeft, Uint uRight, Uint vLeft, Uint 
     new->left = uLeft;
     new->right = uRight;
     new->length = r->children[GETINDEX(uLeft)]->length;
-    new->children[GETINDEX(uRight+1)] = r->children[GETINDEX(uLeft)]; /* TODO: uRight+1 == vLeft?? */
+    new->children[GETINDEX(uRight+1)] = r->children[GETINDEX(uLeft)]; 
     new->children[GETINDEX(uRight+1)]->left = uRight+1;
     new->children[GETINDEX(uRight+1)]->length = new->length + uRight - uLeft + 1;
     new->children[GETINDEX(uRight+1)]->parent = new; 
@@ -223,7 +222,6 @@ static void verify(const fsmTree_t root, fsmTree_t node, BOOL fast) {
     xLeft = node->left - node->length + 1;
 
     if (fast) {
-      /*printf("%p - %d - %d\n", (void*)root, xLeft, node->right);*/
       fastCanonize(root, xLeft, node->right, &r, &uLeft, &uRight, &vLeft, &vRight);
     } 
     else {
@@ -235,7 +233,6 @@ static void verify(const fsmTree_t root, fsmTree_t node, BOOL fast) {
       if (uLeft <= uRight) {
 	if (r->traversed[GETINDEX(uLeft)]) {
 	  verify((r->left == ROOT ? r : r->tail), r->children[GETINDEX(uLeft)], True);
-	  /*verify((r->left == ROOT ? r : r->tail), r->children[GETINDEX(uLeft)], False);*/
 	}
       }
       else if (r->traversed[GETINDEX(vLeft)]) {
@@ -311,7 +308,6 @@ static BOOL writeEncoder(BOOL internal, FILE *file) {
     s.high_count = totalN;
   }
   totalNodes--;
-  /* DEBUGCODE(printf("low:%d high:%d scale:%d length:%ld\n", s.low_count, s.high_count, s.scale, bit_ftell_output(file))); */
   encode_symbol(file, &s);
 
   return ((totalNodes == internalNodes) || internalNodes == 0);
@@ -457,7 +453,6 @@ static void printRec(const fsmTree_t tree, int level) {
       printf("-");
     }
 
-    /*printf("  %d - %d \n", text[tree->left], text[tree->right]);*/
     assert (tree->right < textlen);
     assert (tree->left < textlen);
     printf("%ld - %ld (%p) parent: %p orig: %p\n", tree->left, tree->right, (void*)tree, (void*)tree->parent, (void*)tree->origin); 
@@ -591,7 +586,6 @@ void writeFsmTree(const fsmTree_t tree, FILE *file) {
   s.low_count = internalNodes;
   s.high_count = internalNodes + 1;
   encode_symbol(file, &s);
-  /* DEBUGCODE(printf("%d %d %d\n", s.scale, s.low_count, s.high_count)); */
   
   if (internalNodes > 0) {
     writeFsmTreeRec(tree, 0, file);
@@ -628,14 +622,12 @@ void printContext (fsmTree_t tree) {
   while (tree->left != ROOT) {
     for (i=tree->left; i< tree->right; i++) {
       printf("%c", *(text + i));
-      /*printf("%d", i);*/
     }
     if (tree->right == textlen) {
       printf("$\n");
     }
     else {
       printf("%c\n", *(text + tree->right));
-      /*printf("%d\n", tree->right);*/
     }
     tree = tree->parent;
   }

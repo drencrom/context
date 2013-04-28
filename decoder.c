@@ -52,10 +52,8 @@ static void fixParents (decoderTree_t tree, BOOL *deletedChars) {
 
     if (!newChars) { /* there are no new symbols */
       DEBUGCODE(printf("fixing %p\n", (void *)parTree));
-      /*numEscapes = parTree->totalCount;*/
       parTree->totalCount = 0;
       for (i=0; i<parTree->totalSyms; i++) {  
-	/*numEscapes -= parTree->count[i];*/
 	if (deletedChars[alphaindex[parTree->symbols[i]]]) {
 	  parTree->count[i] = 0;
 	}
@@ -64,9 +62,6 @@ static void fixParents (decoderTree_t tree, BOOL *deletedChars) {
 	}
       }
 
-      /*numEscapes = numEscapes >> 1;
-      if (numEscapes == 0) numEscapes = 1;  es necesario esto? 
-      parTree->totalCount += numEscapes;*/
       parTree->totalCount *= 2;
     }
     else break;
@@ -78,9 +73,8 @@ static void rescale (decoderTree_t tree) {
   Uint numEscapes, i;
   DEBUGCODE(printf("rescalo %p\n", (void *)tree));
 
-  numEscapes = tree->totalCount; /* - tree->count[0];*/
-  /*tree->count[0] = tree->count[0] >> 1;*/
-  tree->totalCount = 0; /*tree->count[0];*/
+  numEscapes = tree->totalCount; 
+  tree->totalCount = 0; 
   CALLOC(charFlags, BOOL, alphasize);    
 
   for (i=0; i<tree->totalSyms; i++) {  
@@ -88,7 +82,6 @@ static void rescale (decoderTree_t tree) {
       numEscapes -= tree->count[i];
       tree->count[i] = tree->count[i] >> 1;
       if (tree->count[i] == 0) {
-	/*DEBUGCODE(printf("needtofix %d\n", tree->symbols[i]));*/
 	charFlags[alphaindex[tree->symbols[i]]] = True;
 	needToFix = True;
       }
@@ -103,9 +96,11 @@ static void rescale (decoderTree_t tree) {
   }
   FREE(charFlags);
   numEscapes = numEscapes >> 1;
-  if (numEscapes == 0) numEscapes = 1; /* es necesario esto? */
+  if (numEscapes == 0) numEscapes = 1; 
   tree->totalCount += numEscapes;
 }
+
+#ifdef DEBUG
 
 static void printStats (decoderTree_t origTree, Uint *maskedChars, Uint i) {
   int j;
@@ -116,19 +111,12 @@ static void printStats (decoderTree_t origTree, Uint *maskedChars, Uint i) {
 	   (maskedChars[alphaindex[origTree->symbols[j]]] == i+1 ? "(masked) " : ""));
   }
   printf("Total: %ld %ld (%p)\n", origTree->totalCount, origTree->totalSyms, (void *)origTree);
-  /*printf("Total: %d %d\n", origTree->totalCount, origTree->totalSyms);*/
-  
-  /*if (!isRootDecoderTree (origTree)) {
-    for (j=0; j<origTree->right; j++) {
-      printf("%d-", *(*(origTree->text) + j));
-    }
-    printf("%d\n", *(*(origTree->text) + origTree->right));
-  }
-  else printf("\n");*/
 }
 
+#endif
+
 static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree_t * prevTree, Uint i, Uint * zPrevLeft, Uint * zPrevRight) {
-  decoderTree_t sNext, child, newChild, new, newLeaf;
+  decoderTree_t sNext, child = NULL, newChild, new, newLeaf;
   Uint zLeft = 1, zRight = 0, uSize, uLeft, zNextLeft, j, k, b;
   BOOL end;
 
@@ -183,12 +171,10 @@ static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree
 		((*(*prevTree)->text)[*zPrevLeft] == (*child->text)[k])) { /* head z belongs to WORD T */
 	      if (k == child->right) {
 		new = child;
-		/* TODO: esto es dudoso, ¿hay que seguir bajando? */
 	      }
 	      else {
 		zLeft = child->left;
 		zRight = k + *zPrevRight - *zPrevLeft;
-		/* TODO: esto es dudoso, ¿hay que seguir bajando? */
 	      }
 	    }
 	    else {
@@ -270,7 +256,6 @@ static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree
       verifyDecoder((isRootDecoderTree(sNext) ? sNext : sNext->tail), new);
     }
     else {
-      /* Hay que llamar a verify? */
       new = sNext;
       *zPrevLeft = new->right + 1; /* empty */
     }
@@ -282,7 +267,6 @@ static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree
   /* get b */
   b = -1; /* lambda */ 
   if (new->internalFSM) {
-    /*if (new->internal) {*/
     if (!isRootDecoderTree(new) && new->right < i) {
       b = text[i - new->right - 1];
     }
@@ -309,9 +293,6 @@ static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree
     (*newLeaf->text)[newLeaf->left] = b;      
 
     memcpy(newLeaf->transitions, new->transitions, alphasize * sizeof(decoderTree_t));
-    /*for (j=0; j<alphasize; j++) {
-      newLeaf->transitions[j] = new->transitions[j];
-      }*/
 
     if (new->internal) {
       newLeaf->origin = newLeaf;
@@ -329,7 +310,7 @@ static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree
 }
 
 void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE *output, const BOOL useSee) {
-  Uint i, j, k, length, count, numMasked, prevCount, allCount, low, *maskedChars, state;
+  Uint i, j, k, length, count, numMasked, allCount, low, *maskedChars, state;
   Uint zPrevLeft = 1, zPrevRight = 0;
   Uchar sym = 0;
   SYMBOL s;
@@ -349,7 +330,6 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
     origTree = tree->origin;
     numMasked = 0;
     DEBUGCODE(printf("index: %ld\n", i));
-    /*DEBUGCODE(printf("orig: "); printStats(tree, maskedChars));*/
 
     if (origTree->totalCount > MAX_COUNT && origTree->used) {
       rescale (origTree);
@@ -372,7 +352,6 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
 	if (low > 0 && useSee) {
 	  state = getSeeStateDecoder(origTree, allCount, i, numMasked, text, alphasize);
 	  if (state != -1) {
-	    /*DEBUGCODE(printf("-- state %d %d\n", See[state][0], See[state][1]));*/
 	    s.scale = See[state][1];
 	    count = get_current_count(&s);
 	    if (count < See[state][0]) { /* escape */
@@ -409,7 +388,6 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
 	
 	if (!escape) {
 	  count = get_current_count(&s);
-	  /*DEBUGCODE(printf("scale: %d count: %d\n", s.scale, count));*/
 
 	  for (j=0; maskedChars[alphaindex[origTree->symbols[j]]] == i+1; j++);
 	  s.high_count = origTree->count[j];
@@ -451,14 +429,13 @@ void decode (decoderTree_t tree, const Uint textlen, FILE *compressedFile, FILE 
 
       if (isRootDecoderTree(origTree) && !found) {
 	found = True;
-	for (j=0, count=0, prevCount=0; j<alphasize; j++) {
+	for (j=0, count=0; j<alphasize; j++) {
 	  if (maskedChars[j] != i+1) {
 	    count++;
 	  }
 	}
 	s.scale = count;
 	count = get_current_count(&s);
-	/*DEBUGCODE(printf("scale: %d count: %d\n", s.scale, count));*/
 
 	s.high_count=0;
 	for (j=0; (j < alphasize) && (s.high_count <= count); j++) {

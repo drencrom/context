@@ -14,7 +14,6 @@ mode=64bit
 
 #os=windows
 
-
 ifeq (${mode},64bit)
  CFLAGS+=-m64 -DSIXTYFOURBITS
  CFLAGSOPT+=-m64 -DSIXTYFOURBITS

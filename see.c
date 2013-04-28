@@ -56,11 +56,8 @@ int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked,
   state <<= 3;
   state |= get3ByteRepresentation(numMasked, alphasize);
 
-  /*state <<= 3;
-    state |= get3ByteRepresentation(tree->totalSyms, alphasize);*/
-
   syms = tree->totalSyms;
-  /************/
+
   if (alphasize < 150) {
     while (!isRootFsmTree(tree) && tree->totalSyms == syms) {
       tree = tree->parent->origin;
@@ -73,7 +70,6 @@ int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked,
       state |= tree->totalSyms;
     }
   }
-  /************/
 
   state <<=3;
   if ((pos > 0) && (text[pos-1] > 0)) {
@@ -99,7 +95,7 @@ int getSeeStateDecoder (decoderTree_t tree, Uint allCount, Uint pos, Uint numMas
   state |= get3ByteRepresentation(numMasked, alphasize);
   
   syms = tree->totalSyms;
-  /************/
+
   if (alphasize < 150) {
     while (!isRootDecoderTree(tree) && tree->totalSyms == syms) {
       tree = tree->parent->origin;
@@ -112,7 +108,6 @@ int getSeeStateDecoder (decoderTree_t tree, Uint allCount, Uint pos, Uint numMas
       state |= tree->totalSyms;
     }
   }
-  /************/
 
   state <<=3;
   if ((pos > 0) && (text[pos-1] > 0)) {

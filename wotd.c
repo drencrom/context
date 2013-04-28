@@ -215,7 +215,6 @@ static Uchar **getsbufferspaceeager(Uchar **left,Uchar **right)
     if(width > sbufferwidth)
     {
       sbufferwidth = width;
-      /* DEBUGCODE(printf("sbufferwidth: %i\n", sbufferwidth)); */
       REALLOC(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
     }
     return sbufferspace;
@@ -516,77 +515,6 @@ static Uint getnextbranch(Uint previousbranch)
   }
 }
 
-
-#ifdef DEBUG
-
-
-/**
- * Prints the root of the tree to the standard output. 
- */
-static void showrootchildtab()
-{
-  Uint i;
-
-  for(i=0; i<=UCHAR_MAX; i++)
-  {
-    if(rootchildtab[i] != UNDEFINEDSUCC)
-    {
-      if(rootchildtab[i] & LEAFBIT)
-      {
-        printf("#%c-successor of root is leaf %lu\n",
-               (char) i,
-               (Showuint) (rootchildtab[i] & ~LEAFBIT));
-      } else
-      {
-        printf("#%c-successor of root is branch %ld\n",
-                (char) i,
-                (Showsint) rootchildtab[i]);
-      }
-    }
-  }
-  printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
-}
-
-
-/**
- * Prints the tree array representation to the standard output.
- */
-static void showstreetab()
-{
-  Uint leftpointer, *nodeptr = streetab;
-
-  showrootchildtab();
-  while(nodeptr < nextfreeentry)
-  {
-    if(ISLEAF(nodeptr))
-    {
-      printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
-      leftpointer = GETLP(nodeptr);
-      printf(" Leaf %lu",(Showuint) leftpointer);
-      if(ISRIGHTMOSTCHILD(nodeptr))
-      {
-        printf(" (last)");
-      }
-      nodeptr++;
-    } else
-    {
-      printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
-      leftpointer = GETLP(nodeptr);
-      printf(" Branch(%lu,%lu)",(Showuint) leftpointer,
-                                (Showuint) GETFIRSTCHILD(nodeptr));
-      if(ISRIGHTMOSTCHILD(nodeptr))
-      {
-        printf(" (last)");
-      }
-      nodeptr += BRANCHWIDTH;
-    }
-    (void) putchar('\n');
-  }
-}
-
-#endif
-
-
 /**
  * Specifically tests if it is necessary to prune the tree at the root and does it if necessary .
  */
@@ -620,9 +548,6 @@ static void pruneRoot() {
     }
     else {
       childStats = (statistics_t)GETSTATS(nodeptr);
-      /*for (i=0; i<alphasize; i++) {
-	stats->count[i] += childStats->count[i];
-	}*/
       for (i=0; i<childStats->symbolCount; i++) {
 	if (stats->count[childStats->symbols[i]] == 0) {
 	  stats->symbols[stats->symbolCount++] = childStats->symbols[i];
@@ -649,15 +574,11 @@ static void pruneRoot() {
 
   auxx = escapeCost(stats, distinct);
   stats->cost += auxx;
-  /*printf("==> %f\n", auxx);*/
   assert(auxx >= 0);
 
   free(distinct);
 
-  /*est = kt(stats);*/ 
-  /*est = moffat(stats);*/
   est = nodeCost(stats);
-  /*est = deckard(stats);*/
 
   if (est <= stats->cost) { /* pruning needed */
     nextfreeentry = 0; /* indicates an empty tree */
@@ -699,7 +620,6 @@ static void prune(Uint node, Uint length, Uint branchLength) {
 	stats->count[idx]++;
 	distinct[idx]++;
       }
-      /*stats->cost += log2Alpha();*/
     }
     else {
       childStats = (statistics_t)GETSTATS(nodeptr);
@@ -738,15 +658,11 @@ static void prune(Uint node, Uint length, Uint branchLength) {
   
   auxx = escapeCost(stats, distinct);
   stats->cost += auxx;
-  /*printf("==> %f\n", auxx);*/
   assert(auxx >= 0);
 
   free(distinct);
   if ((length-branchLength) < MAX_HEIGHT) {
-    /*est = kt(stats); */
-    /*est = moffat(stats);*/
     est = nodeCost(stats);
-    /*est = deckard(stats);*/
     assert(est >= 0);
 
     if (est <= stats->cost) { /* pruning needed */
@@ -803,8 +719,6 @@ static void evaluateeager() {
   sortByChar0();
   firstbranch = evalrootsuccedges(suffixes,suffixes+textlen-1);
 
-  /* DEBUGCODE(showstreetab()); */
-  /* DEBUGCODE(putchar('\n')); */
   if(firstbranch != UNDEFREFERENCE)
   {
     PUSHNODE(firstbranch);
@@ -820,8 +734,6 @@ static void evaluateeager() {
 	if (!ISUNEVALUATED(streetab+node)) { /* the node has already been evaluated */
 	  prune(node, length, branchLength);
 	  node = UNDEFREFERENCE; /* to continue the while */
-	  /* DEBUGCODE(showstreetab()); */
-	  /* DEBUGCODE(putchar('\n')); */
 	}
 	else {
 	  if((nextbranch = getnextbranch(node)) != UNDEFREFERENCE) {
@@ -832,12 +744,8 @@ static void evaluateeager() {
 
 	  if (length < MAX_HEIGHT) {
 	    newNode = evaluatenodeeager(node, &branchLength);
-	    /* DEBUGCODE(showstreetab()); */
-	    /* DEBUGCODE(putchar('\n')); */
 	    if (newNode == UNDEFREFERENCE) { /* all children are leaves */
 	      prune(node, length + branchLength, branchLength);
-	      /* DEBUGCODE(showstreetab()); */
-	      /* DEBUGCODE(putchar('\n')); */
 	    }
 	    else {
 	      PUSHNODE(node);
@@ -855,8 +763,6 @@ static void evaluateeager() {
       }
     }
     FREE(stack);
-    /* DEBUGCODE(showstreetab()); */
-    /* DEBUGCODE(putchar('\n')); */
   }
 }
 
@@ -896,7 +802,6 @@ static void wotd()
 {
   inittree();
   evaluateeager();
-  /* DEBUGCODE(showstreetab()); */
   FREE(suffixes);
   FREE(sbufferspace);  
 }

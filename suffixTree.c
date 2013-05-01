@@ -382,12 +382,12 @@ void pruneSuffixTree(suffixTree_t tree) {
 	  tree->stats->cost += child->stats->cost;
 	  freeStatistics(child->stats);
 	}
-	/* FIXME: ver bien el costo de la raiz (= alphasize) */
+
 	GET_RIGHT(right, tree);
 	tree->stats->cost += hAlpha() * alphasize * (right - tree->left + 1); 
 
 	/*est = kt(tree->stats);*/
-	est = howard(tree->stats);
+	est = nodeCost(tree->stats);
 	if (est <= tree->stats->cost) { /* we have to prune */
 	  tree->stats->cost = est;
 	  pruneSubTree(tree->child);

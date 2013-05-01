@@ -10,16 +10,11 @@
 /** Calculates the Krichevsky-Trofimov probability assignment. */
 double kt(statistics_t);
 
-/** Calculates an approximation of the Moffat PPMC probability assignment. */
-double moffat(statistics_t);
-double moffat2(statistics_t);
+/** Calculates the cost of a node. */
+double nodeCost(statistics_t);
 
-/** Calculates an aproximation of the Howard probability. */
-double howard(statistics_t);
-
-double aux (statistics_t, Uint *);
-
-double newstats(statistics_t);
+/** Calculates the cost of escapes in a node*/
+double escapeCost(statistics_t, Uint *);
 
 /** Returns the log2 of the alphabet size. */
 double log2Alpha (); 

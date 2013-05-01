@@ -117,7 +117,11 @@ double kt (statistics_t stats) {
   return (gamma1 + gamma2 - gamma3 - sum) / M_LN2;
 }
 
-double howard (statistics_t stats) {
+/**
+ * @param[in] stats The statistics needed to calculate the probability assignment.
+ * @returns KT probability assignment.
+ */
+double nodeCost (statistics_t stats) {
   Uint ns = 0, i;
   double sum = 0;
   double loghalf = -0.6931471805599452862;
@@ -154,7 +158,11 @@ double deckard (statistics_t stats) {
   return x;
 }
 
-double aux (statistics_t stats, Uint * distinct) {
+/**
+ * @param[in] stats The statistics needed to calculate the probability assignment.
+ * @returns KT probability assignment.
+ */
+double escapeCost (statistics_t stats, Uint * distinct) {
   Uint ns = 0, i;
   double sum = 0;
   double loghalf = -0.6931471805599452862;

@@ -627,10 +627,9 @@ static void pruneRoot() {
     }
   } while (!end);
 
-  /* FIXME: ver bien el costo de la raiz (= alphasize) */
   stats->cost += hAlpha() * alphasize;
 
-  auxx = aux(stats, distinct);
+  auxx = escapeCost(stats, distinct);
   stats->cost += auxx;
   /*printf("==> %f\n", auxx);*/
   assert(auxx >= 0);
@@ -639,7 +638,7 @@ static void pruneRoot() {
 
   /*est = kt(stats);*/ 
   /*est = moffat(stats);*/
-  est = howard(stats);
+  est = nodeCost(stats);
   /*est = deckard(stats);*/
 
   if (est <= stats->cost) { /* pruning needed */
@@ -719,7 +718,7 @@ static void prune(Uint node, Uint length, Uint branchLength) {
 
   stats->cost += hAlpha() * alphasize * branchLength;
   
-  auxx = aux(stats, distinct);
+  auxx = escapeCost(stats, distinct);
   stats->cost += auxx;
   /*printf("==> %f\n", auxx);*/
   assert(auxx >= 0);
@@ -728,7 +727,7 @@ static void prune(Uint node, Uint length, Uint branchLength) {
   if ((length-branchLength) < MAX_HEIGHT) {
     /*est = kt(stats); */
     /*est = moffat(stats);*/
-    est = howard(stats);
+    est = nodeCost(stats);
     /*est = deckard(stats);*/
     assert(est >= 0);
  

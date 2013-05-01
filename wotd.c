@@ -512,13 +512,13 @@ static void pruneRoot() {
 
   nodeptr = streetab;
 
-  /* contadores */
+  /* counters */
   stats = getStatistics();
 
   do {
     if (ISLEAF(nodeptr)) {
-      if (GETLP(nodeptr) > 0) { /* sino el caracter anterior esta afuera del string */
-	pos = GETLP(nodeptr) - 1; /* posicion donde empieza la hoja menos el largo anterior */
+      if (GETLP(nodeptr) > 0) { /* if false the previous character is outside of string */
+	pos = GETLP(nodeptr) - 1; /* position where leaf starts minus previous length */
 	idx = alphaindex[*(text+pos)];
 	if (stats->count[idx] == 0) {
 	  stats->symbols[stats->symbolCount++] = idx;
@@ -554,13 +554,13 @@ static void pruneRoot() {
 
   stats->cost += hAlpha() * alphasize;
 
-  auxx = aux(stats, distinct);
+  auxx = escapeCost(stats, distinct);
   stats->cost += auxx;
   assert(auxx >= 0);
 
   free(distinct);
 
-  est = howard(stats);
+  est = nodeCost(stats);
 
   if (est <= stats->cost) { /* pruning needed */
     nextfreeentry = 0; /* indicates an empty tree */
@@ -638,13 +638,13 @@ static void prune(Uint node, Uint length, Uint branchLength) {
 
   stats->cost += hAlpha() * alphasize * branchLength;
   
-  auxx = aux(stats, distinct);
+  auxx = escapeCost(stats, distinct);
   stats->cost += auxx;
   assert(auxx >= 0);
 
   free(distinct);
   if ((length-branchLength) < MAX_HEIGHT) {
-    est = howard(stats);
+    est = nodeCost(stats);
     assert(est >= 0);
  
     if (est <= stats->cost) { /* pruning needed */

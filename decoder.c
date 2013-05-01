@@ -115,7 +115,7 @@ static void addNodes (Uchar * text, Uchar sym, decoderTree_t * tree, decoderTree
   Uint zLeft = 1, zRight = 0, uSize, uLeft, zNextLeft, j, k, b;
   BOOL end;
 
-  text[i] = sym; 
+  text[i] = sym;
   sNext = (*tree)->transitions[alphaindex[sym]];
   new = NULL;
 

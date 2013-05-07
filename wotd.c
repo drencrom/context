@@ -598,7 +598,7 @@ static void pruneRoot() {
 	stats->count[idx]++;
 	distinct[idx]++;
       }
-      stats->cost += log2Alpha();
+      /*stats->cost += log2Alpha();*/
     }
     else {
       childStats = (statistics_t)GETSTATS(nodeptr);
@@ -730,7 +730,7 @@ static void prune(Uint node, Uint length, Uint branchLength) {
     est = nodeCost(stats);
     /*est = deckard(stats);*/
     assert(est >= 0);
- 
+
     if (est <= stats->cost) { /* pruning needed */
       nextfreeentry = streetab + GETFIRSTCHILD(nodeptrPar);
       SETFIRSTCHILD(nodeptrPar, UNDEFREFERENCE);

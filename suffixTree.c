@@ -221,12 +221,12 @@ static void printNode(suffixTree_t tree) {
     /* nothing */
   }
   else if (tree->left == ROOT) {
-    printf("root");
+    printf("root %p", tree);
   }
   else {
     GET_RIGHT(right, tree);
     if (right == INFINITY) right = textlen;
-    printf("%ld - %ld", tree->left, right);
+    printf("%ld - %ld - %p", tree->left, right, tree);
     /*for (i=tree->left; i<= tree->right; i++) {
       if (i == textlen) {
 	printf("$");
@@ -339,7 +339,8 @@ void buildSuffixTree(suffixTree_t tree) {
 void pruneSuffixTree(suffixTree_t tree) {
   Uint stacktop=0, stackalloc=0, *stack = NULL, treePtr, length, i, right;
   suffixTree_t child;
-  double est;
+  double est, auxx;
+  Uint * distinct;
 
   tree = tree->child; /* ROOT */
   PUSHNODE((Uint)tree);
@@ -353,11 +354,9 @@ void pruneSuffixTree(suffixTree_t tree) {
       if (tree->left > length) { /* this is not the full string prefix */
 	i = GETINDEX(tree->left-length-1);
 	tree->stats->count[i] = 1;
-	tree->stats->cost = log2Alpha();
+	tree->stats->symbols[tree->stats->symbolCount++] = i;
       }
-      else {
-	tree->stats->cost = log2Alpha();
-      }
+      /*tree->stats->cost = log2Alpha();*/
     }
     else { /* is a branching node */
       for (child=tree->child; child && child->stats; child=child->sibling);
@@ -375,9 +374,15 @@ void pruneSuffixTree(suffixTree_t tree) {
       } 
       else { /* all children are already evaluated */
 	tree->stats = allocStatistics();
+	CALLOC(distinct, Uint, alphasize);
+
 	for (child=tree->child; child; child=child->sibling) {
-	  for (i=0; i<alphasize; i++) {
-	    tree->stats->count[i] += child->stats->count[i];
+	  for (i=0; i<child->stats->symbolCount; i++) {
+	    if (tree->stats->count[child->stats->symbols[i]] == 0) {
+	      tree->stats->symbols[tree->stats->symbolCount++] = child->stats->symbols[i];
+	    } 
+	    tree->stats->count[child->stats->symbols[i]] += child->stats->count[child->stats->symbols[i]];
+	    distinct[child->stats->symbols[i]]++;
 	  }
 	  tree->stats->cost += child->stats->cost;
 	  freeStatistics(child->stats);
@@ -386,8 +391,14 @@ void pruneSuffixTree(suffixTree_t tree) {
 	GET_RIGHT(right, tree);
 	tree->stats->cost += hAlpha() * alphasize * (right - tree->left + 1); 
 
+	auxx = escapeCost(tree->stats, distinct);
+	tree->stats->cost += auxx;
+
+	free(distinct);
+
 	/*est = kt(tree->stats);*/
 	est = nodeCost(tree->stats);
+
 	if (est <= tree->stats->cost) { /* we have to prune */
 	  tree->stats->cost = est;
 	  pruneSubTree(tree->child);

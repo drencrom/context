@@ -42,7 +42,7 @@ static void fixParents (decoderTree_t tree, BOOL *deletedChars) {
 
     for (i=0; i<parTree->totalSyms && !newChars; i++) {
       sym = parTree->symbols[i];
-      newChars |= (parTree->count[i] > 0) && (findSymbolCount(tree, sym) == 0) && (!deletedChars[alphaindex[sym]]);
+      newChars |= parTree->count[i] > 1;
     }
 
     if (!newChars) { /* there are no new symbols */
@@ -94,7 +94,7 @@ static void rescale (decoderTree_t tree) {
   }
 
   if (needToFix) {
-    fixParents(tree, charFlags);
+   fixParents(tree, charFlags);
   }
   FREE(charFlags);
   numEscapes = numEscapes >> 1;

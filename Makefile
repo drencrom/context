@@ -3,12 +3,12 @@ LD=${CC}
 # use the following line if you want to compile the source for 64 bit
 # architectures
 
-#mode=64bit
+mode=64bit
 
 # use the following line if you want to compile the source for 32 bits
 # architectures
 
-mode=32bit
+#mode=32bit
 
 ifeq (${mode},64bit)
  CFLAGS+=-m64 -DSIXTYFOURBITS

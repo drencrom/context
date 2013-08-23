@@ -1,11 +1,11 @@
 #!/bin/bash
 
 file_path=../../../files
-ctw=../../ctw/ctw
-ppm=../../code/ppmd-i1-jorge/PPMd.exe
-paq=../../paq/zpaq102
-unpaq=../../paq/unzpaq102
-paqfile=../../paq/max.cfg
+ctw=../../32/ctw/ctw
+ppm=../../code/32/ppmd-i1/PPMd.exe
+paq=../../32/paq/zpaq102
+unpaq=../../32/paq/unzpaq102
+paqfile=../../32/paq/max.cfg
 encoder=../hpzip.opt
 decoder=../hpunzip.opt
 tmpfile=/tmp/tabulator_tmp

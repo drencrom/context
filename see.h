@@ -6,7 +6,7 @@
 #include "decoderTree.h"
 
 /** SEE table structure */
-Uint See[1<<13][2];
+Uint See[1<<14][2];
 
 /** Returns the contents of the SEE table for the encoder */
 int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked, const Uchar * text, Uint alphasize);

@@ -12,17 +12,6 @@
 #include "arithmetic/coder.h"
 #include "arithmetic/bitio.h"
 
-static Uint findSymbolCount (decoderTree_t tree, Uchar sym) {
-  Uint i;
-
-  for (i=0; i<tree->totalSyms; i++) {
-    if (tree->symbols[i] == sym) {
-      return tree->count[i];
-    }
-  }
-  return 0;
-}
-
 /**
  * Remove symbols from the statistics of the ancestors of this node in case that is necessary.
  * Symbols are removed from the ancestors if they only have the same symbols as the child node
@@ -32,7 +21,6 @@ static Uint findSymbolCount (decoderTree_t tree, Uchar sym) {
  */
 static void fixParents (decoderTree_t tree, BOOL *deletedChars) {
   Uint i; /*, numEscapes;*/
-  Uchar sym;
   decoderTree_t parTree = tree;
   BOOL newChars;
 
@@ -41,7 +29,6 @@ static void fixParents (decoderTree_t tree, BOOL *deletedChars) {
     newChars = False;
 
     for (i=0; i<parTree->totalSyms && !newChars; i++) {
-      sym = parTree->symbols[i];
       newChars |= parTree->count[i] > 1;
     }
 

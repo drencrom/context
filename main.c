@@ -265,11 +265,11 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
       printf("Tree built\n");
     }
 
-    if (part > 1) {
+    /*if (part > 1) {
       copyStatistics(prevTree, stree, prevText);
       FREE(prevText);
       freeFsmTree(prevTree);
-    }
+    }*/
 
     DEBUGCODE(printf("gamma hits: %d gamma Misses: %d\n", getHits(), getMisses()));
     printf("height: %ld\n", getHeight(stree));

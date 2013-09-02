@@ -68,7 +68,7 @@ int getSeeStateEncoder (fsmTree_t tree, Uint allCount, Uint pos, Uint numMasked,
 int getSeeStateDecoder (decoderTree_t tree, Uint allCount, Uint pos, Uint numMasked, const Uchar * text, Uint alphasize) {
   Uint state, syms;
 
-  if ((allCount >= (alphasize >= 150 ? 128 : 30))) {
+  if (allCount >= (alphasize >= 150 ? 128 : 30)) {
     return -1;
   }
 

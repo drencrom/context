@@ -12,17 +12,6 @@
 #include "see.h"
 #include "reset.h"
 
-Uint findSymbolCount (fsmTree_t tree, Uchar sym) {
-  Uint i;
-
-  for (i=0; i<tree->totalSyms; i++) {
-    if (tree->symbols[i] == sym) {
-      return tree->count[i];
-    }
-  }
-  return 0;
-}
-
 static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
   int j;
 
@@ -57,7 +46,6 @@ static void printStats (fsmTree_t origTree, Uint *maskedChars, Uint i) {
  */
 static void fixParents (fsmTree_t tree, BOOL *deletedChars) {
   Uint i; /*, numEscapes;*/
-  Uchar sym;
   fsmTree_t parTree = tree;
   BOOL newChars;
 
@@ -66,7 +54,6 @@ static void fixParents (fsmTree_t tree, BOOL *deletedChars) {
     newChars = False;
 
     for (i=0; i<parTree->totalSyms && !newChars; i++) {
-      sym = parTree->symbols[i];
       newChars |= parTree->count[i] > 1;
     }
 
@@ -204,6 +191,10 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 	      DEBUGCODE(printf("--scale: %d diff: %d symbol: %d\n", escape.scale, escape.high_count - escape.low_count, -2));
 	      encode_symbol(compressedFile, &escape);
 	      
+	      DEBUGCODE(printf("SEE encontrado: original %f, SEE %f, resultado: %s\n", (s.high_count - s.low_count) / (double)s.scale, 
+			       (escape.high_count - escape.low_count) / (double)escape.scale * (s.high_count - s.low_count) / (double)low,
+			((escape.high_count - escape.low_count) / (double)escape.scale * (s.high_count - s.low_count) / (double)low) > 
+			       ((s.high_count - s.low_count) / (double)s.scale) ? "gana" : "pierde"));
 	      s.scale = low;
 	      updateSee(state, False, alphasize);
 	    }
@@ -233,7 +224,10 @@ void encode (fsmTree_t tree, FILE *compressedFile, const Uchar *text, const Uint
 	      DEBUGCODE(printf("--scale: %d diff: %d symbol: %d\n", escape.scale, escape.high_count - escape.low_count, -1));
 	      assert(See[state][1] > 0);
 	      encode_symbol(compressedFile, &escape);
-	      
+
+	      DEBUGCODE(printf("SEE escape: original %f, SEE %f, resultado: %s\n", (s.high_count - s.low_count) / (double)s.scale, 
+			       escape.high_count / (double)escape.scale,
+			       (escape.high_count / (double)escape.scale) > ((s.high_count - s.low_count) / (double)s.scale) ? "gana" : "pierde"));
 	      s.scale = 0;
 	      updateSee(state, True, alphasize);
 	    }

@@ -705,6 +705,9 @@ decoderTree_t readDecoderTree(FILE *file) {
     readEncoder(file); /* leo el root */
     readDecoderTreeRec(ret, file);
   }
+  else {
+    ret->internalFSM = False;
+  }
 
   return ret;
 }

@@ -31,7 +31,7 @@
 /** Kurtz suffix tree contruction algorithm. */
 #define KURTZ 2
 
-/** Magic number to detect valid hpz files */
+/** Magic number to detect valid ctx files */
 #define MAGIC 0x3276
 
 /**
@@ -206,7 +206,7 @@ static void zip(char *filename, char *compressed, BOOL algorithm, int parts, BOO
   if (!compressed) {
     CALLOC(compressed, Uchar, strlen(filename) + 5);
     strcpy(compressed, filename);
-    strcat(compressed, ".hpz");
+    strcat(compressed, ".ctx");
     alloc = True;
   }
 
@@ -433,7 +433,7 @@ int main(int argc,char *argv[])
   else {
     pos++;
   }
-  compress = !(strncmp(pos, "hpunzip", 7) == 0);
+  compress = !(strncmp(pos, "uncontext", 9) == 0);
     
   i = 1;
   while (i < argc && argv[i][0] == '-') {

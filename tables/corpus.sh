@@ -3,8 +3,8 @@
 file_path=../../../files/$1
 ctw=../../ctw/ctw
 ppm=../../code/ppmd-i1-jorge/PPMd.exe
-encoder=../hpzip.opt 
-decoder=../hpunzip.opt 
+encoder=../context.opt 
+decoder=../uncontext.opt 
 tmpfile=/tmp/tabulator_tmp
 
 bpcs="2 k "
@@ -19,10 +19,10 @@ for i in "$file_path"/*; do
         time=`(/usr/bin/time -f%E $encoder $i  > /dev/null) 2>&1`
         echo -n ",$time"
 
-        size=`du -b $i.hpz | awk '{print $1}'`
+        size=`du -b $i.ctx | awk '{print $1}'`
         echo -n ",$size"
 
-      	decTime=`(/usr/bin/time -f%E $decoder $i.hpz $tmpfile > /dev/null) 2>&1`
+      	decTime=`(/usr/bin/time -f%E $decoder $i.ctx $tmpfile > /dev/null) 2>&1`
 	echo -n ",$decTime"
 
 	diff $i $tmpfile > /dev/null 	
@@ -48,6 +48,6 @@ echo "$bpcs" | dc;
 echo
 
 rm -f $tmpfile
-rm -f $file_path/*.hpz
+rm -f $file_path/*.ctx
  
 

@@ -6,8 +6,8 @@ ppm=../../code/32/ppmd-i1/PPMd.exe
 paq=../../32/paq/zpaq102
 unpaq=../../32/paq/unzpaq102
 paqfile=../../32/paq/max.cfg
-encoder=../hpzip.opt
-decoder=../hpunzip.opt
+encoder=../context.opt
+decoder=../uncontext.opt
 tmpfile=/tmp/tabulator_tmp
 
 sizes=( 100k 600k 1m )
@@ -26,10 +26,10 @@ for ((i=0; i<${#sizes[*]}; i++)); do
         time=`(/usr/bin/time -f%E $encoder $file_path/${sizes[$i]}/${data_files[$i]}  > /dev/null) 2>&1`
         echo -n ",$time"
 
-        size=`du -b $file_path/${sizes[$i]}/${data_files[$i]}.hpz | awk '{print $1}'`
+        size=`du -b $file_path/${sizes[$i]}/${data_files[$i]}.ctx | awk '{print $1}'`
         echo -n ",$size"
 
-       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${data_files[$i]}.hpz $tmpfile > /dev/null) 2>&1`
+       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${data_files[$i]}.ctx $tmpfile > /dev/null) 2>&1`
 	echo -n ",$decTime"
 
 	diff $file_path/${sizes[$i]}/${data_files[$i]} $tmpfile > /dev/null 	
@@ -97,10 +97,10 @@ for ((i=0; i<${#sizes[*]}; i++)); do
         time=`(/usr/bin/time -f%E $encoder $file_path/${sizes[$i]}/${text_files[$i]} > /dev/null) 2>&1`
         echo -n ",$time"
 
-        size=`du -b $file_path/${sizes[$i]}/${text_files[$i]}.hpz | awk '{print $1}'`
+        size=`du -b $file_path/${sizes[$i]}/${text_files[$i]}.ctx | awk '{print $1}'`
         echo -n ",$size"
 
-       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${text_files[$i]}.hpz $tmpfile > /dev/null) 2>& 1`
+       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${text_files[$i]}.ctx $tmpfile > /dev/null) 2>& 1`
 	echo -n ",$decTime"
 
 	diff $file_path/${sizes[$i]}/${text_files[$i]} $tmpfile > /dev/null 	

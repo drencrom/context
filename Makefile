@@ -60,18 +60,18 @@ OBJOPT=main.opt.o\
 
 .PHONY: all arithmetic doc clean doc-clean
 
-all: arithmetic hpzip.opt hpzip
+all: arithmetic context.opt context
 
 arithmetic:
 	${MAKE} -C arithmetic "CFLAGS=${CFLAGSOPT}" 
 
-hpzip: ${OBJ}
+context: ${OBJ}
 	${LD} ${LDFLAGS} ${OBJ} -o $@
-	ln -sf hpzip hpunzip
+	ln -sf context uncontext
 
-hpzip.opt: ${OBJOPT}
+context.opt: ${OBJOPT}
 	${LD} ${LDFLAGS} ${OBJOPT} -o $@
-	ln -sf hpzip.opt hpunzip.opt
+	ln -sf context.opt uncontext.opt
 
 doc:
 	doxygen Doxyfile

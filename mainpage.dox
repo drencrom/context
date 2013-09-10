@@ -1,12 +1,104 @@
-/*! \mainpage Context documentation
- *
- * \section intro_sec Introduction
- *
- * This is the introduction.
- *
- * \section install_sec Installation
- *
- * \subsection step1 Step 1: Opening the box
- *
- * etc...
+/*! \mainpage Documentation
+   
+    \section intro_sec Introduction
+   
+    In this page you will find information about our semi-predictive context 
+    algorithm implementation. The source code and documentation can be browsed 
+    from this page and can also be cloned from 
+    <a href="https://github.com/drencrom/context">github repository</a>.
+   
+    \section install_sec Installation
+   
+    \subsection windows Windows
+   
+    The included hpzip.vcproj file is a Visual Studio project that allows
+    the compilation of the program in a Windows environment.
+   
+    The GSL library is needed to compile the project. The included project
+    files assume that the library files are located in
+    <tt>C:\\Program Files\\GnuWin32\\lib</tt> and the include files are in
+    <tt>C:\\Program Files\\GnuWin32\\include</tt> (those are the default 
+	installation directories for the Windows GSL library)
+   
+    The project include debug and release settings, in addition to the
+    optimizations and debug symbols the debug settings define the DEBUG
+    preprocessor variable.
+   
+    \subsection unix Unix
+   
+    The included Makefile can be used to compile the project in a GNU
+    environment. This file creates two executable files: context and
+    context.opt. The first one is the debug version and the second is the
+    optimized version. The debug version defines the DEBUG preprocessor
+    variable. The <i>mode</i> variable in the Makefile determines if 
+	a 64 bit or 32 bit version of the binary is produced.
+   
+    In addition to those files, two links to them are created called
+    uncontext and uncontext.opt. These can be used to decompress files without
+    the needing to specify any command line options.
+   
+    The GSL library is needed for compilation. It must be located in any
+    of the default library directories. If this is not so the appropriate
+    environment variables should be adjusted (i.e. LD_LIBRARY_PATH, etc.)
+   
+    This makefile can also be used to generate the program documentation and
+    this web page. To do so the command "make doc" must be executed. For it
+    to work the the doxygen documentation utility must be installed in the
+    system.
+   
+    To clean the object code files created during compulation "make clean"
+    must be executed. Furthermore the "make doc-clean" command deletes all
+    the generated documentation.
+   
+    \section usage Usage
+    
+    context [options] input_file [output_file]<br/>
+    uncontext [options] input_file [output_file]
+    
+    Options:
+    <ul>
+    		<li>
+            -z: compress (default)
+    		</li>
+    		<li>
+            -d: decompress (default if invoked as uncontext)
+    		</li>
+    		<li>
+            -s: use secondary espace estimation (SEE)
+    		</li>
+    		<li>
+            -h: show this message
+    		</li>
+    </ul>
+   
+    Options for compression only:
+    <ul>
+    		<li>
+            -k: use Kurtz algorithm (default)
+    		</li>
+    		<li>
+            -u: use Ukkonnen algorithm (default with -b)
+    		</li>
+    		<li>
+            -p <num>: number of parts to partition the file
+    		</li>
+    </ul>
+    
+    When the file is invoked as <i>context</i> compression is the default
+    action. When invoked as <i>uncontext</i> decompression is the default.
+    
+    The default output_file for compression is input_file.ctx. When
+    decompressing the default output file is the input file with the
+    extension removed. If the input file does not have an extension the
+    default output file wil be input_file.out
+    
+    The -k and -u options select the algorithm that will be used to build
+    the context tree of the input string.
+   
+    \section arithmetic Arithmetic Encoder
+   
+    The <i>arithemtic</i> directory contains the arithemtic encoder/decoder
+    source code as taken from 
+    <a href="http://dogma.net/markn/articles/arith/part1.htm">this article</a>
+   
  */

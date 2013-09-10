@@ -6,14 +6,14 @@ ppm=../../code/32/ppmd-i1/PPMd.exe
 paq=../../32/paq/zpaq102
 unpaq=../../32/paq/unzpaq102
 paqfile=../../32/paq/max.cfg
-encoder=../hpzip.opt
-decoder=../hpunzip.opt
+encoder=../context.opt
+decoder=../uncontext.opt
 tmpfile=/tmp/tabulator_tmp
 
-sizes=( 100k 600k 1m )
-#sizes=( 100k 600k 1m 2m 2.5m 4m )
-data_files=( lexgrog fcpci.ko xine trident_dri.so libkabc_groupwise.so.1.0.0 libevll.so )
-text_files=( texto.txt book2 bible.txt 2donq10.txt world192.txt bible.txt )
+sizes=( 50k 100k 600k 1m )
+#sizes=( 50k 100k 600k 1m 2m )
+data_files=( libfltk_images.so.1.1 timezones.png object.o user32.dll.so trident_dri.so )
+text_files=( overlay_spanish.txt super.c smsserver.log steamui_spanish.txt 2donq10.txt )
 
 
 echo "DATA"
@@ -26,10 +26,10 @@ for ((i=0; i<${#sizes[*]}; i++)); do
         time=`(/usr/bin/time -f%E $encoder $file_path/${sizes[$i]}/${data_files[$i]}  > /dev/null) 2>&1`
         echo -n ",$time"
 
-        size=`du -b $file_path/${sizes[$i]}/${data_files[$i]}.hpz | awk '{print $1}'`
+        size=`du -b $file_path/${sizes[$i]}/${data_files[$i]}.ctx | awk '{print $1}'`
         echo -n ",$size"
 
-       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${data_files[$i]}.hpz $tmpfile > /dev/null) 2>&1`
+       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${data_files[$i]}.ctx $tmpfile > /dev/null) 2>&1`
 	echo -n ",$decTime"
 
 	diff $file_path/${sizes[$i]}/${data_files[$i]} $tmpfile > /dev/null 	
@@ -97,10 +97,10 @@ for ((i=0; i<${#sizes[*]}; i++)); do
         time=`(/usr/bin/time -f%E $encoder $file_path/${sizes[$i]}/${text_files[$i]} > /dev/null) 2>&1`
         echo -n ",$time"
 
-        size=`du -b $file_path/${sizes[$i]}/${text_files[$i]}.hpz | awk '{print $1}'`
+        size=`du -b $file_path/${sizes[$i]}/${text_files[$i]}.ctx | awk '{print $1}'`
         echo -n ",$size"
 
-       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${text_files[$i]}.hpz $tmpfile > /dev/null) 2>& 1`
+       	decTime=`(/usr/bin/time -f%E $decoder $file_path/${sizes[$i]}/${text_files[$i]}.ctx $tmpfile > /dev/null) 2>& 1`
 	echo -n ",$decTime"
 
 	diff $file_path/${sizes[$i]}/${text_files[$i]} $tmpfile > /dev/null 	

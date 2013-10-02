@@ -1,11 +1,13 @@
 #include <assert.h>
-#include <obstack.h>
 #include "spacedef.h"
 #include "debug.h"
 #include "decoderTree.h"
 #include "alpha.h"
 #include "arithmetic/coder.h"
 #include "arithmetic/bitio.h"
+#ifndef WIN32
+#include <obstack.h>
+#endif
 
 /** Flag to indicate a node is the root. */
 #define ROOT -1
@@ -19,7 +21,9 @@ static Ushort internalNodes;
 /** Total number of nodes in the tree. */
 static Uint totalNodes;
 
+#ifndef WIN32
 static struct obstack nodeStack;
+#endif
 
 static void  updateChildrenTransitions(decoderTree_t node, Uint cidx, decoderTree_t origTrans, decoderTree_t newTrans) {
   Uint i;
@@ -593,10 +597,12 @@ static void printRec(const decoderTree_t tree, int level) {
 #endif
 
 void initDecoderTreeStack() {
+#ifndef WIN32
   obstack_init (&nodeStack);
   if (obstack_chunk_size (&nodeStack) < 16384) {
     obstack_chunk_size (&nodeStack) = 16384;
   }
+#endif
 }
 
 
@@ -615,6 +621,7 @@ decoderTree_t initDecoderTree(BOOL useMalloc) {
     MALLOC(ret->symbols, Uchar, alphasize);
   }
   else {
+#ifndef WIN32
     ret = (decoderTree_t)obstack_alloc(&nodeStack, sizeof(struct decoderTree));
     memset(ret, 0, sizeof(struct decoderTree));
 
@@ -629,6 +636,14 @@ decoderTree_t initDecoderTree(BOOL useMalloc) {
 
     ret->count = (Uint *)obstack_alloc(&nodeStack, sizeof(Uint) * alphasize);
     ret->symbols = (Uchar *)obstack_alloc(&nodeStack, sizeof(Uchar) * alphasize);
+#else
+   CALLOC(ret, struct decoderTree, 1);
+    CALLOC(ret->children, struct decoderTree *, alphasize);
+    CALLOC(ret->transitions, struct decoderTree *, alphasize);
+    CALLOC(ret->traversed, BOOL, alphasize);
+    MALLOC(ret->count, Uint, alphasize); 
+    MALLOC(ret->symbols, Uchar, alphasize);
+#endif
   }
 
   /* not always true but makes sense as init */

@@ -1,7 +1,9 @@
 #ifndef FSM_TREE_H
 #define FSM_TREE_H
 
+#ifndef WIN32
 #include <obstack.h>
+#endif
 #include "types.h"
 
 /** Encoder context tree structure. */
@@ -25,7 +27,9 @@ typedef struct fsmTree {
   BOOL *traversed, /**< List of flags indicating an attempt was made to traverse each child edge. */
        used; /**< Flag that indicates if this node has been used to encode a symbol. */
   
+#ifndef WIN32
   struct obstack nodeStack; /**< Obstack used to allocate memory for this tree. */
+#endif
 } *fsmTree_t;
 
 /** Creates and initializes a new fsm tree structure instance. */

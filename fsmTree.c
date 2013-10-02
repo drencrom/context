@@ -477,6 +477,8 @@ fsmTree_t initFsmTree() {
   CALLOC(ret, struct fsmTree, 1);
   memset(ret, 0, sizeof(struct fsmTree));
 
+#ifndef WIN32
+
   obstack_init (&(ret->nodeStack));
   if (obstack_chunk_size (&(ret->nodeStack)) < 16384) {
     obstack_chunk_size (&(ret->nodeStack)) = 16384;
@@ -494,13 +496,16 @@ fsmTree_t initFsmTree() {
   ret->count = (Uint *)obstack_alloc(&(ret->nodeStack), sizeof(Uint) * alphasize);
   ret->symbols = (Uchar *)obstack_alloc(&(ret->nodeStack), sizeof(Uchar) * alphasize);
 
+#else
 
-  /*CALLOC(ret, struct fsmTree, 1);
+  CALLOC(ret, struct fsmTree, 1);
   CALLOC(ret->children, struct fsmTree *, alphasize);
   CALLOC(ret->transitions, struct fsmTree *, alphasize);
   CALLOC(ret->traversed, BOOL, alphasize);
   MALLOC(ret->count, Uint, alphasize); 
-  MALLOC(ret->symbols, Uchar, alphasize); */
+  MALLOC(ret->symbols, Uchar, alphasize); 
+
+#endif
 
   /* not always true but makes sense as init */
   ret->left = ret->right = ROOT;
@@ -514,13 +519,16 @@ fsmTree_t initFsmTree() {
  * @param[in] tree tree to delete. 
  */
 void freeFsmTree(fsmTree_t tree) {
-  /*FREE(tree->children);
+#ifndef WIN32
+  obstack_free(&(tree->nodeStack), NULL);
+#else
+  FREE(tree->children);
   FREE(tree->transitions);
   FREE(tree->traversed);
   FREE(tree->count);
   FREE(tree->symbols);
-  FREE(tree);*/
-  obstack_free(&(tree->nodeStack), NULL);
+  FREE(tree);
+#endif
 } 
 
 void addSymbol(fsmTree_t tree, const Uchar sym) {

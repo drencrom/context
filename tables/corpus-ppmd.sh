@@ -19,7 +19,7 @@ for i in *; do
 	echo -n ",ppm"
 
 	rm -f xxx.pmd
- 	time=`(/usr/bin/time -f%E $ppm e -m265 -o16 -fxxx.pmd $base > /dev/null) 2>&1`
+ 	time=`(/usr/bin/time -f%E $ppm e -m256 -o16 -fxxx.pmd $base > /dev/null) 2>&1`
     echo -n ",$time"
 
     size=`du -b xxx.pmd | awk '{print $1}'`

@@ -64,7 +64,7 @@ for ((i=0; i<${#sizes[*]}; i++)); do
  	echo -n ",ppm"
  	cd $file_path/${sizes[$i]}
  	rm -f xxx.pmd
- 	time=`(/usr/bin/time -f%E $ppm e -m265 -o16 -fxxx.pmd ${data_files[$i]} > /dev/null) 2>&1`
+ 	time=`(/usr/bin/time -f%E $ppm e -m256 -o16 -fxxx.pmd ${data_files[$i]} > /dev/null) 2>&1`
  	echo -n ",$time"                      
         size=`du -b xxx.pmd | awk '{print $1}'`
         echo -n ",$size"
@@ -135,7 +135,7 @@ for ((i=0; i<${#sizes[*]}; i++)); do
         echo -n ",ppm"
         cd $file_path/${sizes[$i]}
  	rm -f xxx.pmd
-        time=`(/usr/bin/time -f%E $ppm e -m265 -o16 -fxxx.pmd ${text_files[$i]} > /dev/null) 2>&1`
+        time=`(/usr/bin/time -f%E $ppm e -m256 -o16 -fxxx.pmd ${text_files[$i]} > /dev/null) 2>&1`
         echo -n ",$time"
         size=`du -b xxx.pmd | awk '{print $1}'`
         echo -n ",$size"

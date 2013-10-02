@@ -4,7 +4,7 @@
    
     In this page you will find information about our semi-predictive context 
     algorithm implementation. The source code and documentation can be browsed 
-    from this page and can also be cloned from 
+    from this page and can also be cloned from this
     <a href="https://github.com/drencrom/context">github repository</a>.
    
     \section install_sec Installation
@@ -101,4 +101,18 @@
     source code as taken from 
     <a href="http://dogma.net/markn/articles/arith/part1.htm">this article</a>
    
+    \section binaries Binaries
+
+	Precompiled binary files:
+    <ul>
+    		<li>
+            Windows: <a href="windows/context.exe">context.exe</a>
+    		</li>
+    		<li>
+            Linix (32 bits): <a href="linux32/context">context</a>
+    		</li>
+    		<li>
+            Linix (64 bits): <a href="linux64/context">context</a>
+    		</li>
+    </ul>
  */

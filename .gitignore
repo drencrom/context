@@ -16,6 +16,8 @@
 *.out
 *.app
 
-/hpzip
-/hpzip.opt
+/context
+/uncontext
+/context.opt
+/uncontext.opt
 /doc

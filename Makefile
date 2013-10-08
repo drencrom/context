@@ -10,6 +10,11 @@ mode=64bit
 
 #mode=32bit
 
+# use this flag to compile on windows
+
+#os=windows
+
+
 ifeq (${mode},64bit)
  CFLAGS+=-m64 -DSIXTYFOURBITS
  CFLAGSOPT+=-m64 -DSIXTYFOURBITS
@@ -20,9 +25,14 @@ else
  LDFLAGS+=-m32
 endif
 
+ifeq (${os},windows)
+ CFLAGS+=-DWIN32
+ CFLAGSOPT+=-DWIN32
+endif
+
 CFLAGSOPT+=-g -O3 -Wall -ansi -pedantic 
 CFLAGS+=-g -Wall -ansi -pedantic -DDEBUG 
-LDFLAGS+=-lgsl -lgslcblas -lm
+LDLIBS+=-lgsl -lgslcblas -lm
 
 OBJ=main.o\
     wotd.o\
@@ -66,11 +76,11 @@ arithmetic:
 	${MAKE} -C arithmetic "CFLAGS=${CFLAGSOPT}" 
 
 context: ${OBJ}
-	${LD} ${LDFLAGS} ${OBJ} -o $@
+	${LD} ${LDFLAGS} ${OBJ} -o $@ ${LDLIBS}
 	ln -sf context uncontext
 
 context.opt: ${OBJOPT}
-	${LD} ${LDFLAGS} ${OBJOPT} -o $@
+	${LD} ${LDFLAGS} ${OBJOPT} -o $@ ${LDLIBS}
 	ln -sf context.opt uncontext.opt
 
 doc:

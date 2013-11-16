@@ -478,7 +478,6 @@ fsmTree_t initFsmTree() {
   memset(ret, 0, sizeof(struct fsmTree));
 
 #ifndef WIN32
-
   obstack_init (&(ret->nodeStack));
   if (obstack_chunk_size (&(ret->nodeStack)) < 16384) {
     obstack_chunk_size (&(ret->nodeStack)) = 16384;
@@ -495,16 +494,13 @@ fsmTree_t initFsmTree() {
   
   ret->count = (Uint *)obstack_alloc(&(ret->nodeStack), sizeof(Uint) * alphasize);
   ret->symbols = (Uchar *)obstack_alloc(&(ret->nodeStack), sizeof(Uchar) * alphasize);
-
 #else
-
   CALLOC(ret, struct fsmTree, 1);
   CALLOC(ret->children, struct fsmTree *, alphasize);
   CALLOC(ret->transitions, struct fsmTree *, alphasize);
   CALLOC(ret->traversed, BOOL, alphasize);
   MALLOC(ret->count, Uint, alphasize); 
   MALLOC(ret->symbols, Uchar, alphasize); 
-
 #endif
 
   /* not always true but makes sense as init */

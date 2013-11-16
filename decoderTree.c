@@ -637,7 +637,7 @@ decoderTree_t initDecoderTree(BOOL useMalloc) {
     ret->count = (Uint *)obstack_alloc(&nodeStack, sizeof(Uint) * alphasize);
     ret->symbols = (Uchar *)obstack_alloc(&nodeStack, sizeof(Uchar) * alphasize);
 #else
-   CALLOC(ret, struct decoderTree, 1);
+    CALLOC(ret, struct decoderTree, 1);
     CALLOC(ret->children, struct decoderTree *, alphasize);
     CALLOC(ret->transitions, struct decoderTree *, alphasize);
     CALLOC(ret->traversed, BOOL, alphasize);

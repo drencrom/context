@@ -9,47 +9,38 @@
    
     \section install_sec Installation
    
-    \subsection windows Windows
-   
-    The included hpzip.vcproj file is a Visual Studio project that allows
-    the compilation of the program in a Windows environment.
-   
-    The GSL library is needed to compile the project. The included project
-    files assume that the library files are located in
-    <tt>C:\\Program Files\\GnuWin32\\lib</tt> and the include files are in
-    <tt>C:\\Program Files\\GnuWin32\\include</tt> (those are the default 
-	installation directories for the Windows GSL library)
-   
-    The project include debug and release settings, in addition to the
-    optimizations and debug symbols the debug settings define the DEBUG
-    preprocessor variable.
-   
     \subsection unix Unix
    
     The included Makefile can be used to compile the project in a GNU
-    environment. This file creates two executable files: context and
-    context.opt. The first one is the debug version and the second is the
-    optimized version. The debug version defines the DEBUG preprocessor
+    environment. This file creates two executable files: <i>context</i> and
+    <i>context.opt</i>. The first one is the debug version and the second is the
+    optimized version. The debug version defines the <tt>DEBUG</tt> preprocessor
     variable. The <i>mode</i> variable in the Makefile determines if 
-	a 64 bit or 32 bit version of the binary is produced.
+    a 64 bit or 32 bit version of the binary is produced.
    
     In addition to those files, two links to them are created called
-    uncontext and uncontext.opt. These can be used to decompress files without
-    the needing to specify any command line options.
+    <i>uncontext</i> and <i>uncontext.opt</i>. These can be used to decompress
+    files without the needing to specify any command line options.
    
     The GSL library is needed for compilation. It must be located in any
     of the default library directories. If this is not so the appropriate
-    environment variables should be adjusted (i.e. LD_LIBRARY_PATH, etc.)
+    environment variables should be adjusted (i.e. <tt>LD_LIBRARY_PATH</tt>, etc.)
    
     This makefile can also be used to generate the program documentation and
-    this web page. To do so the command "make doc" must be executed. For it
+    this web page. To do so the command <tt>make doc</tt> must be executed. For it
     to work the the doxygen documentation utility must be installed in the
     system.
    
-    To clean the object code files created during compulation "make clean"
-    must be executed. Furthermore the "make doc-clean" command deletes all
-    the generated documentation.
+    To clean the object code files created during compilation <tt>make clean</tt> must
+    be executed. Furthermore the <tt>make doc-clean</tt> command deletes all the
+    generated documentation.
    
+    \subsection windows Windows
+   
+    The included Makefile can be used to compile the project in Windows using
+    gcc if the variable <tt>os</tt> is set to <i>windows</i>. Cygwin is needed
+    for this to work.
+
     \section usage Usage
     
     context [options] input_file [output_file]<br/>
@@ -97,7 +88,7 @@
    
     \section arithmetic Arithmetic Encoder
    
-    The <i>arithemtic</i> directory contains the arithemtic encoder/decoder
+    The <i>arithmetic</i> directory contains the arithemtic encoder/decoder
     source code as taken from 
     <a href="http://dogma.net/markn/articles/arith/part1.htm">this article</a>
    
@@ -109,10 +100,10 @@
             Windows: <a href="windows/context.exe">context.exe</a>
     		</li>
     		<li>
-            Linix (32 bits): <a href="linux32/context">context</a>
+            Linux (32 bits): <a href="linux32/context">context</a>
     		</li>
     		<li>
-            Linix (64 bits): <a href="linux64/context">context</a>
+            Linux (64 bits): <a href="linux64/context">context</a>
     		</li>
     </ul>
  */

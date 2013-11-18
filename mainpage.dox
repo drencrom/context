@@ -6,6 +6,9 @@
     algorithm implementation. The source code and documentation can be browsed 
     from this page and can also be cloned from this
     <a href="https://github.com/drencrom/context">github repository</a>.
+
+	Also the source code for this algorithm can be downloaded
+	<a href="context-src.tgz">here</a>.
    
     \section install_sec Installation
    
